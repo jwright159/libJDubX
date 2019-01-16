@@ -72,7 +72,7 @@ public class WScreen implements Screen{
 
 	@Override
 	public void resize(int x, int y){
-		Tenebrae.verbose("Resizing! "+x+"x"+y);
+		Log.verbose("Resizing! "+x+"x"+y);
 		worldStage.getViewport().update(x,y);
 		uiStage.getViewport().update(x,y);
 	}

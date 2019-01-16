@@ -14,6 +14,9 @@ public abstract class Log{
 	public static void setVerbosity(byte v){
 		verbosity = v;
 	}
+	public static byte getVerbosity(){
+		return verbosity;
+	}
 	public static void setLogFile(FileHandle file){
 		setLogWriter(file.writer(false));
 	}

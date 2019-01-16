@@ -95,7 +95,7 @@ public class WSkin extends Skin{
 											try{
 												regions.get(i).getTexture().dispose();
 											}catch(GdxRuntimeException e){
-												Tenebrae.error(e.getMessage());
+												Log.error(e.getMessage());
 											}
 										}
 									}

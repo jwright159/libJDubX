@@ -157,23 +157,23 @@ public interface JVSValue{
 		}
 		public Object get(Scope scope, JVSValue[] values){
 			scope = new Scope(scope, "fof "+scope.id);
-			Tenebrae.parseLog("Funcing", Arrays.toString(keys), Arrays.toString(values), scope);
+			Log.parseLog("Funcing", Arrays.toString(keys), Arrays.toString(values), scope);
 			if(keys != null && values != null)
 				for(int i = 0; i < values.length; i++)
 					scope.forcePut(keys[i], new JVSVal<Object>(values[i].get(scope.parent)));
 
 			Object o = null;
 			for(JVSValue v : this.v){
-				Tenebrae.parseLog("Func", v, scope);
+				Log.parseLog("Func", v, scope);
 				o = v.get(scope);
-				Tenebrae.parseLog("Func got", o);
+				Log.parseLog("Func got", o);
 				if(v instanceof Return)
 					return new Return(o);
 			}
 			return o;
 		}
 		public Object getFromScope(Scope scope, Scope values){
-			Tenebrae.parseLog("getfromscope", this, Arrays.toString(keys), values, scope);
+			Log.parseLog("getfromscope", this, Arrays.toString(keys), values, scope);
 			return get(scope, values.getVals(keys));
 		}
 		public void add(JVSValue v){
@@ -184,7 +184,7 @@ public interface JVSValue{
 		}
 		@Override
 		public String toString(){
-			return super.toString()+((Tenebrae.verbosity & 0b100_0000) != 0 ? "§"+Tenebrae.stringify("\n\t", v.toArray()) : "");
+			return super.toString()+((Log.getVerbosity() & 0b100_0000) != 0 ? "§"+Log.stringify("\n\t", v.toArray()) : "");
 		}
 		public class Caller extends FunctionCaller{
 			public Caller(JVSValue[] args){
@@ -204,7 +204,7 @@ public interface JVSValue{
 			Function func = (Function)this.func.get(scope);
 			if(func == null)
 				throw new NullPointerException("Attempt to call a null function "+this.func+" in scope "+scope);
-			Tenebrae.parseLog("FuncCaller", scope, this.func, func, Arrays.toString(args));
+			Log.parseLog("FuncCaller", scope, this.func, func, Arrays.toString(args));
 			Object v = func.get(scope, args);
 			return v;
 		}
@@ -226,10 +226,10 @@ public interface JVSValue{
 		}
 		@Override
 		public V get(String key){
-			Tenebrae.parseLog("Getting", key, "from", this);
+			Log.parseLog("Getting", key, "from", this);
 			V x = vars.get(key);
 			if(x instanceof WValueI){
-				Tenebrae.parseLog("Is a WValueI");
+				Log.parseLog("Is a WValueI");
 				try{
 					return (V)new JVSVal(((WValueI)x).get());
 				}catch(UnsupportedOperationException e){
@@ -243,9 +243,9 @@ public interface JVSValue{
 		}
 		@Override
 		public V put(String key, V value){
-			Tenebrae.parseLog("Putting", key, value, "was", vars.get(key), "in", this);
+			Log.parseLog("Putting", key, value, "was", vars.get(key), "in", this);
 			if(vars.get(key) instanceof WValueI){
-				Tenebrae.parseLog("Is a WValueI");
+				Log.parseLog("Is a WValueI");
 				try{
 					((WValueI)vars.get(key)).put(value instanceof JVSVal ? ((JVSVal)value).get(null) : value);
 				}catch(UnsupportedOperationException e){
@@ -308,7 +308,7 @@ public interface JVSValue{
 		}
 		@Override
 		public String toString(){
-			if((Tenebrae.verbosity & 0b100_0000) == 0)
+			if((Log.getVerbosity() & 0b100_0000) == 0)
 				return super.toString();
 			String rtn = super.toString() + "[";
 			for(ObjectMap.Entry<String,Object> e : this)
@@ -547,7 +547,7 @@ public interface JVSValue{
 			JVSValue[] vals = new JVSValue[keys.length];
 			for(int i = 0; i < keys.length; i++)
 				vals[i] = get(keys[i]);
-			Tenebrae.parseLog("GetVals", Arrays.toString(keys), Arrays.toString(vals));
+			Log.parseLog("GetVals", Arrays.toString(keys), Arrays.toString(vals));
 			return vals;
 		}
 		@Override
@@ -563,7 +563,7 @@ public interface JVSValue{
 			return value;
 		}
 		private void forcePut(String key, JVSValue value){
-			Tenebrae.parseLog("Forcing", key, value, "in", this);
+			Log.parseLog("Forcing", key, value, "in", this);
 			if(value == null || (value instanceof JVSVal && ((JVSVal)value).isNull()))
 				throw new NullPointerException("Attempt to assign nonexistant value to "+key+" in scope "+this);
 			super.put(key, value);
@@ -573,7 +573,7 @@ public interface JVSValue{
 			return super.containsKey(key) || (parent != null && parent.containsKey(key));
 		}
 		public Object run(String func){
-			Tenebrae.verbose("Running", func, "from", this);
+			Log.verbose("Running", func, "from", this);
 			Object f = getVal(func, Object.class, null);
 			if(f == null)
 				throw new NullPointerException("Attempt to call a null function "+func+" FROM A SYSTEM CONTEXT in scope "+this);
@@ -606,7 +606,7 @@ public interface JVSValue{
 		}
 		@Override
 		public Object get(Scope scope){
-			Tenebrae.parseLog("Getter",scope,s,k);
+			Log.parseLog("Getter",scope,s,k);
 			Object x;
 			if(s != null){
 				Dict s = (Dict)this.s.get(scope);
@@ -618,7 +618,7 @@ public interface JVSValue{
 					x = s.get(k);
 			}else
 				x = scope.getVal(k, Object.class, null);
-			Tenebrae.parseLog("Got", x);
+			Log.parseLog("Got", x);
 			return x;
 		}
 		@Override
@@ -639,13 +639,13 @@ public interface JVSValue{
 		}
 		@Override
 		public Object get(Scope scope){
-			Tenebrae.parseLog("Putter",scope,s,k,v);
+			Log.parseLog("Putter",scope,s,k,v);
 			Object x;
 			if(s != null)
 				x = ((Scope)s.get(scope)).put(k, new JVSVal<Object>(v.get(scope)));
 			else
 				x = scope.put(k, new JVSVal<Object>(v.get(scope)));
-			Tenebrae.parseLog("Put", x);
+			Log.parseLog("Put", x);
 			return x;
 		}
 		@Override
@@ -720,7 +720,7 @@ public interface JVSValue{
 		}
 		@Override
 		public Object get(Scope scope){
-			Tenebrae.parseLog("IfCond", cond);
+			Log.parseLog("IfCond", cond);
 			Function which = (Function)(JVSParser.isTruthy(cond.get(scope)) ? tru.get(scope) : fal == null ? null : fal.get(scope));
 			Object v = which == null ? null : which.get(scope, null);
 			return v instanceof Return ? v : null;

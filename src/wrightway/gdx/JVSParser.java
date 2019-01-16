@@ -65,24 +65,24 @@ public final class JVSParser{
 		}
 
 		if(ch == '/' && (code.charAt(pos + 1) == '/' || code.charAt(pos + 1) == '*')){
-			Tenebrae.parseVerbose("Discovered a comment!");
+			Log.parseVerbose("Discovered a comment!");
 			if(code.charAt(pos + 1) == '/'){
-				//Tenebrae.parseVerbose("Single line");
+				//Log.parseVerbose("Single line");
 				while(ch != '\n' && ch != -1)
 					nextChar();
 			}else if(code.charAt(pos + 1) == '*'){
-				Tenebrae.parseVerbose("Multi line");
+				Log.parseVerbose("Multi line");
 				nextChar();
 				nextChar();
 				nextChar();
 				while(!(code.charAt(pos - 1) == '*' && ch == '/') && ch != -1){
-					//Tenebrae.debug(String.valueOf(code.charAt(pos-1))+ch);
+					//Log.debug(String.valueOf(code.charAt(pos-1))+ch);
 					nextChar();
 				}
 				nextChar();
 			}
 			eat(' ');
-			//Tenebrae.parseLog("Resuming at " + Character.toChars(charToEat)[0]);
+			//Log.parseLog("Resuming at " + Character.toChars(charToEat)[0]);
 			return poll(charToEat);
 		}
 
@@ -95,15 +95,15 @@ public final class JVSParser{
 		}
 
 		if(skipEncaps && ch != charToEat && charToEat != '"' && (ch == '(' || ch == '[' || ch == '{')){
-			Tenebrae.parseVerbose("Nest! " + Character.toChars(ch)[0]);
+			Log.parseVerbose("Nest! " + Character.toChars(ch)[0]);
 			int c = ch;
 			do nextChar(); while(!poll(c == '(' ? ')' : c == '[' ? ']' : c == '{' ? '}' : -1, true));
-			Tenebrae.parseVerbose("Unnest! " + Character.toChars(ch)[0]);
+			Log.parseVerbose("Unnest! " + Character.toChars(ch)[0]);
 			nextChar();
 			return poll(charToEat, skipEncaps);
 		}
 
-		Tenebrae.parseVerbose("Polling at " + pos + ", expected '" + Character.toChars(charToEat)[0] + "', got '" + (ch != -1 ? Character.toChars(ch)[0] + "" : "[-1]") + "'");
+		Log.parseVerbose("Polling at " + pos + ", expected '" + Character.toChars(charToEat)[0] + "', got '" + (ch != -1 ? Character.toChars(ch)[0] + "" : "[-1]") + "'");
 		if(ch == -1 && skipEncaps)
 			throw new RuntimeException("Unexpected end of file! Perhaps didn't close all parentheses/brackets/braces?");
 		if(ch == charToEat)
@@ -112,7 +112,7 @@ public final class JVSParser{
 	}
 
 	public JVSValue.Function parse(){
-		Tenebrae.parseLog("\nParsing code:\n" + code + "\n");
+		Log.parseLog("\nParsing code:\n" + code + "\n");
 		nextChar();
 		JVSValue.Function x = new JVSValue.Function(args);
 		//scope = x.getScope();//new one created by x, was a placeholder for the parent before
@@ -127,17 +127,17 @@ public final class JVSParser{
 		 else
 		 throw r;
 		 }*/
-		Tenebrae.parseLog("Parsed contents of function, got " + x);
+		Log.parseLog("Parsed contents of function, got " + x);
 		if(pos < code.length()) throw new RuntimeException("Unexpected: " + (char)ch + " at " + pos);
 		return x;
 	}
 
 	private JVSValue parseFunction(){
-		Tenebrae.parseVerbose("Parsing function!");
+		Log.parseVerbose("Parsing function!");
 		JVSValue x = null;//scope;
 		String kw;
 		do{
-			Tenebrae.parseVerbose("Next func part");
+			Log.parseVerbose("Next func part");
 			kw = parseKeyword();
 			//if(x == null)
 			//	throw new NullPointerException("Tried to get field \"" + kw + "\" from null pointer at " + pos);//I dont know now???
@@ -194,33 +194,33 @@ public final class JVSParser{
 					kw = parseKeyword();
 					final Object[] newArgs = parseArguments();
 					/*try{
-					 x = ClassReflection.getMethod(Mappack.class, "load"+kw, String.class).invoke(Tenebrae.mp, newArgs[0].toString());
+					 x = ClassReflection.getMethod(Mappack.class, "load"+kw, String.class).invoke(Log.mp, newArgs[0].toString());
 					 }catch(ReflectionException e){
 					 throw new RuntimeException("Have no internal object "+kw+" or no internal constructor that takes only a file name: "+e);
 					 }*/
-					/*x = Tenebrae.mp.loadProjectile(newArgs[0].toString());
+					/*x = Log.mp.loadProjectile(newArgs[0].toString());
 					 ((Function)((Scoped)x).getVar(newArgs[0].toString())).doRun(Arrays.copyOfRange(newArgs, 1, newArgs.length), (Scoped)x);*/
 					switch(kw){
-						case "NPC":
+						/*case "NPC":
 							x = new JVSValue(){
 								@Override
 								public Object get(Scope scope){
-									return Tenebrae.mp.loadNPC(newArgs[0].toString()).vars;
+									return Log.mp.loadNPC(newArgs[0].toString()).vars;
 								}
 							};
-							break;
+							break;*/
 							/*case "Projectile":
 							 x = new JVSValue(){
 							 @Override
 							 public Object get(Scope scope){
-							 return Tenebrae.mp.loadProjectile(newArgs[0].toString());
+							 return Log.mp.loadProjectile(newArgs[0].toString());
 							 }
 							 };
 							 break;*/
 						default:
 							throw new UnsupportedOperationException("Class making isn't implemented yet");
 					}
-					break;
+					//break;//cant be reached now
 
 				case ""://??? for parends and brackets after other parends or brackets or braces???
 					//	x = parseValue();
@@ -232,14 +232,14 @@ public final class JVSParser{
 							prevChar();
 							prevTo("=");
 							x = new JVSValue.Getter(x, kw);
-							Tenebrae.parseVerbose("Got a var", kw, x);
+							Log.parseVerbose("Got a var", kw, x);
 						}else{//putter
-							Tenebrae.parseLog("Putting", kw, "in", x);
+							Log.parseLog("Putting", kw, "in", x);
 							x = new JVSValue.Putter(x, kw, parseExpression());
 						}
 					}else{//getter
 						x = new JVSValue.Getter(x, kw);
-						Tenebrae.parseVerbose("Got a var", kw, x);
+						Log.parseVerbose("Got a var", kw, x);
 					}
 			}
 
@@ -254,7 +254,7 @@ public final class JVSParser{
 				if(x == null){
 					x = parseExpression();
 				}else{
-					//Tenebrae.parseLog("Calling a function!", x, scope, scope2);
+					//Log.parseLog("Calling a function!", x, scope, scope2);
 					x = new JVSValue.FunctionCaller(x, parseArguments());
 				}
 			}else if(poll('[')){
@@ -272,7 +272,7 @@ public final class JVSParser{
 			}
 		}while(eat('.'));
 
-		Tenebrae.parseVerbose("Value of parsed function is", x);
+		Log.parseVerbose("Value of parsed function is", x);
 		return x;
 	}
 
@@ -283,7 +283,7 @@ public final class JVSParser{
 			while(Character.isLetterOrDigit(ch))
 				nextChar();
 		String x = code.substring(startpos, pos);
-		Tenebrae.parseLog("Parsed keyword, got " + x);
+		Log.parseLog("Parsed keyword, got " + x);
 		return x;
 	}
 
@@ -410,7 +410,7 @@ public final class JVSParser{
 			}else if(eat('-')){
 				x = new JVSValue.Subtract(x, parseMultiplication());
 			}else{
-				Tenebrae.parseVerbose("Sum is", x);
+				Log.parseVerbose("Sum is", x);
 				return x;
 			}
 		}
@@ -425,7 +425,7 @@ public final class JVSParser{
 			}else if(eat('%')){
 				x = new JVSValue.Modulize(x, parseMultiplication());
 			}else{
-				Tenebrae.parseVerbose("Product is", x);
+				Log.parseVerbose("Product is", x);
 				return x;
 			}
 		}
@@ -437,12 +437,12 @@ public final class JVSParser{
 				if(eat('*'))
 					x = new JVSValue.Exponentiate(x, parseExpTerm());
 				else{
-					Tenebrae.parseVerbose("Exp is", x);
+					Log.parseVerbose("Exp is", x);
 					prevTo("*");
 					return x;
 				}
 			}else{
-				Tenebrae.parseVerbose("Exp is", x);
+				Log.parseVerbose("Exp is", x);
 				return x;
 			}
 		}
@@ -462,18 +462,18 @@ public final class JVSParser{
 			return new JVSValue.NotBit(parseValue());
 
 		if(eat('(')){
-			Tenebrae.parseVerbose("Found a parenthesis");
+			Log.parseVerbose("Found a parenthesis");
 			JVSValue x = parseExpression();
 			if(!eat(')'))
 				throw new RuntimeException("Mismatched parends or trying to call an object as a func");
 			return x;
 		}
 		if(poll('[')){
-			Tenebrae.parseVerbose("Found a bracket");
+			Log.parseVerbose("Found a bracket");
 			return parseArray();
 		}
 		if(poll('{')){
-			Tenebrae.parseVerbose("Found a brace");
+			Log.parseVerbose("Found a brace");
 			return parseFunctionConstruction();
 		}
 
@@ -496,7 +496,7 @@ public final class JVSParser{
 			while(Character.isDigit(ch) || ch == '.')
 				nextChar();
 			JVSValue x = new JVSValue.Number(Float.valueOf(code.substring(startpos, pos)));
-			Tenebrae.parseLog("Parsed factor, got number", x);
+			Log.parseLog("Parsed factor, got number", x);
 			return x;
 		}
 		if(Character.isLetter(ch)){
@@ -540,7 +540,7 @@ public final class JVSParser{
 		String[] x = new String[y.length];
 		for(int i = 0; i < y.length; i++)
 			x[i] = (String)y[i];
-		Tenebrae.parseLog("Parsed arglist, got " + Arrays.toString(x));
+		Log.parseLog("Parsed arglist, got " + Arrays.toString(x));
 		return x;
 	}
 
@@ -551,7 +551,7 @@ public final class JVSParser{
 		Array<JVSValue> args = new Array<JVSValue>(JVSValue.class);
 		if(!poll(')'))
 			for(;;){
-				Tenebrae.parseVerbose("Got an arg");
+				Log.parseVerbose("Got an arg");
 				args.add(parseExpression());
 				if(!eat(','))
 					break;
@@ -564,7 +564,7 @@ public final class JVSParser{
 		JVSValue[] x = new JVSValue[arr.length];
 		System.arraycopy(arr, 0, x, 0, arr.length);
 
-		Tenebrae.parseLog("Parsed args, got " + Arrays.toString(x));
+		Log.parseLog("Parsed args, got " + Arrays.toString(x));
 		return x;
 	}
 
@@ -575,12 +575,12 @@ public final class JVSParser{
 		JVSValue.WArray arr = new JVSValue.WArray();
 		if(!poll(']'))
 			for(int i = 0;true;i++){
-				Tenebrae.parseVerbose("Got a member");
+				Log.parseVerbose("Got a member");
 				int startpos = pos;//gotta check if theres a key so can tell if string or expr
 				while(!poll(':', true) && !poll(',', true) && !poll(']', true))
 					nextChar();
 				boolean hasKey = poll(':');
-				Tenebrae.parseVerbose("Key?", hasKey);
+				Log.parseVerbose("Key?", hasKey);
 				pos = startpos - 1;
 				nextChar();
 
@@ -592,10 +592,10 @@ public final class JVSParser{
 				}else{
 					key = String.valueOf(i);
 				}
-				Tenebrae.parseVerbose("Key", key);
+				Log.parseVerbose("Key", key);
 				JVSValue x;
 				arr.put(key, x = parseExpression());
-				Tenebrae.parseVerbose("Done with member", x, ",?", poll(','));
+				Log.parseVerbose("Done with member", x, ",?", poll(','));
 				if(!eat(','))
 					break;
 			}
@@ -603,12 +603,12 @@ public final class JVSParser{
 		if(!eat(']'))
 			throw new RuntimeException("Expected a ]");
 
-		Tenebrae.parseLog("Parsed args, got", arr);
+		Log.parseLog("Parsed args, got", arr);
 		return arr;//need to return arr, but also need putters to happen
 	}
 
 	private String parseFunctionCode(){
-		Tenebrae.parseVerbose("Parsing out function code!");
+		Log.parseVerbose("Parsing out function code!");
 		/*if(!eat('{'))
 		 throw new RuntimeException("Didn't start function construction with '{'");*/
 		char cha = eat('{') ? '}' : ';';
@@ -625,7 +625,7 @@ public final class JVSParser{
 	}
 
 	public static boolean isTruthy(Object x){
-		Tenebrae.parseLog("Truthy in", x, x == null ? "null" : x.getClass());
+		Log.parseLog("Truthy in", x, x == null ? "null" : x.getClass());
 		     if(x instanceof Boolean)           x = (boolean)x;
 		else if(x instanceof Float)             x = (float)x != 0;
 		else if(x instanceof String)            x = ((String)x).length() != 0;
@@ -633,7 +633,7 @@ public final class JVSParser{
 		else if(x instanceof JVSValue.Function) x = !((JVSValue.Function)x).isEmpty();
 		//else if(x instanceof JVSValue)          throw new RuntimeException("Tried to truthy an arbitrary JVSValue");//Don't want the get//But dont forget scopeds are now jvsvs
 		else                                    x = x != null;
-		Tenebrae.parseLog("Truthy out", x);
+		Log.parseLog("Truthy out", x);
 		return x;
 	}
 }

@@ -20,7 +20,7 @@ abstract public class TiledMapTileSetLoader{
 	protected static final int FLAG_FLIP_DIAGONALLY = 0x20000000;
 	protected static final int MASK_CLEAR = 0xE0000000;
 	
-	public static TiledMapTileSet loadTileSet(FileHandle file){
+	public static TiledMapTileSet loadTileSet(FileHandle file, TiledMap map){
 		XmlReader xml = new XmlReader();
 		Element element = xml.parse(file);
 
@@ -44,7 +44,7 @@ abstract public class TiledMapTileSetLoader{
 			imageSource = imageElement.getAttribute("source");
 			imageWidth = imageElement.getIntAttribute("width", 0);
 			imageHeight = imageElement.getIntAttribute("height", 0);
-			image = Tenebrae.getRelativeFileHandle(file, imageSource);
+			image = Utils.getRelativeFileHandle(file, imageSource);
 		}
 
 		TiledMapTileSet tileset = new TiledMapTileSet();
@@ -85,7 +85,7 @@ abstract public class TiledMapTileSetLoader{
 					imageSource = imageElement.getAttribute("source");
 					imageWidth = imageElement.getIntAttribute("width", 0);
 					imageHeight = imageElement.getIntAttribute("height", 0);
-					image = Tenebrae.getRelativeFileHandle(file, imageSource);
+					image = Utils.getRelativeFileHandle(file, imageSource);
 				}
 				TextureRegion texture = new TextureRegion(new Texture(image));
 				TiledMapTile tile = new StaticTiledMapTile(texture);
@@ -123,7 +123,7 @@ abstract public class TiledMapTileSetLoader{
 				if(objectgroupElement != null){
 
 					for(Element objectElement: objectgroupElement.getChildrenByName("object")){
-						tile.getObjects().add(loadObject(objectElement, tile.getTextureRegion().getRegionHeight()));
+						tile.getObjects().add(loadObject(objectElement, tile.getTextureRegion().getRegionHeight(), map));
 					}
 				}
 
@@ -153,7 +153,7 @@ abstract public class TiledMapTileSetLoader{
 		return tileset;
 	}
 
-	public static MapObject loadObject(Element element, int heightInPixels){
+	public static MapObject loadObject(Element element, int heightInPixels, TiledMap map){
 		if(element.getName().equals("object")){
 			MapObject object = null;
 
@@ -196,12 +196,12 @@ abstract public class TiledMapTileSetLoader{
 			}
 			if(object == null){
 				String gid = null;
-				if((gid = element.getAttribute("gid", null)) != null){
+				if((gid = element.getAttribute("gid", null)) != null && map != null){
 					int id = (int)Long.parseLong(gid);
 					boolean flipHorizontally = ((id & FLAG_FLIP_HORIZONTALLY) != 0);
 					boolean flipVertically = ((id & FLAG_FLIP_VERTICALLY) != 0);
 
-					TiledMapTile tile = Tenebrae.player.map.map.getTileSets().getTile(id & ~MASK_CLEAR);
+					TiledMapTile tile = map.getTileSets().getTile(id & ~MASK_CLEAR);
 					TiledMapTileMapObject tiledMapTileMapObject = new TiledMapTileMapObject(tile, flipHorizontally, flipVertically);
 					TextureRegion textureRegion = tiledMapTileMapObject.getTextureRegion();
 					tiledMapTileMapObject.getProperties().put("gid", id);
