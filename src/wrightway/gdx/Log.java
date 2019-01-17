@@ -2,6 +2,7 @@ package wrightway.gdx;
 
 import java.io.*;
 import com.badlogic.gdx.files.*;
+import com.badlogic.gdx.*;
 
 public abstract class Log{
 	private static Writer logFile;
@@ -52,6 +53,13 @@ public abstract class Log{
 		log((byte)0b100_0000, msg);
 	}
 	public static void log(byte type, Object... msg){
+		if(verbosity < 0)
+			return;
+		if(logFile == null)
+			//throw new NullPointerException("Attempt to write to log when log writer is null.");
+			setLogFile(Gdx.files.local("error.log"));
+		if(verbosity == 0 && (type & 0b000_0001) != 0)
+			throw new NullPointerException("Attempt to write to log when verbosity is 0. Use negative verbosity to not write to log.");
 		if(type == 0)
 			return;
 		byte t = (byte)(type & verbosity);
