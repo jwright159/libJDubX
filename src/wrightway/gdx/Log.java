@@ -56,9 +56,11 @@ public abstract class Log{
 		if(verbosity < 0)
 			return;
 		if(logFile == null)
-			//throw new NullPointerException("Attempt to write to log when log writer is null.");
-			setLogFile(Gdx.files.local("error.log"));
-		if(verbosity == 0 && (type & 0b000_0001) != 0)
+			if((type & 0b000_0001) != 0)//if its an error
+				setLogFile(Gdx.files.local("error.log"));
+			else
+				throw new NullPointerException("Attempt to write to log when log writer is null.");
+		if(verbosity == 0 && (type & 0b000_0001) == 0)//if verbo not set and its not an error
 			throw new NullPointerException("Attempt to write to log when verbosity is 0. Use negative verbosity to not write to log.");
 		if(type == 0)
 			return;

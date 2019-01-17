@@ -51,27 +51,17 @@ public class WScreen implements Screen{
 	@Override
 	public void dispose(){
 		if(worldStage != null){
-			//Tenebrae.debug("Actors? "+stage.getActors().size);
-			for(Actor actor : worldStage.getActors()){
-				//Tenebrae.debug("Got an actor! "+actor);
-				if(actor instanceof WActor){
-					//Tenebrae.debug("It's a WActor! :D");
+			for(Actor actor : worldStage.getActors())
+				if(actor instanceof WActor)
 					((WActor)actor).dispose();
-				}
-			}
 			worldStage.dispose();
 		}
 		if(uiStage != null){
-			for(Actor actor : uiStage.getActors()){
-				//Tenebrae.debug("Got a hud actor! "+actor);
-				if(actor instanceof WActor){
-					//Tenebrae.debug("It's a WActor! :D");
+			for(Actor actor : uiStage.getActors())
+				if(actor instanceof WActor)
 					((WActor)actor).dispose();
-				}
-			}
 			uiStage.dispose();
 		}
-		//Tenebrae.debug("Disposing of screen! "+this);
 	}
 
 	@Override
