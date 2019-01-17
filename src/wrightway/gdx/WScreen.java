@@ -44,6 +44,10 @@ public class WScreen implements Screen{
 	public void act(){}
 	public void draw(){}
 	
+	public OrthographicCamera getCamera(){
+		return (OrthographicCamera)worldStage.getCamera();
+	}
+	
 	@Override
 	public void dispose(){
 		if(worldStage != null){
