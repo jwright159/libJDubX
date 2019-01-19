@@ -11,6 +11,7 @@ public class WScreen implements Screen{
 	public static float b = 0.0f, bb = b;
 	private boolean isShowing, isRunning;
 	protected InputMultiplexer multiplexer;
+	protected float delta;
 
 	public WScreen(){
 		worldStage = new Stage(new ScreenViewport());
@@ -21,7 +22,7 @@ public class WScreen implements Screen{
 	}
 
 	@Override
-	public void render(float p1){
+	public void render(float delta){
 		if(isShowing){
 			Gdx.gl.glClearColor(b, b, b, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -29,7 +30,7 @@ public class WScreen implements Screen{
 		b = bb;
 
 		if(isRunning){
-			act();
+			act(delta);
 			worldStage.act();
 			uiStage.act();
 		}
@@ -41,7 +42,7 @@ public class WScreen implements Screen{
 		}
 	}
 	
-	public void act(){}
+	public void act(float delta){}
 	public void draw(){}
 	
 	public OrthographicCamera getCamera(){

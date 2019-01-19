@@ -6,8 +6,7 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.*;
 import java.util.*;
 
-public abstract class Utils
-{
+public abstract class Utils{
 	public static String[] trimArray(String[] array){
 		String[] rtn = new String[array.length];
 		for(int i = 0; i < array.length; i++)
@@ -20,6 +19,7 @@ public abstract class Utils
 	public static boolean endsInWhitespace(String string){
 		return string.matches(".*\\s");
 	}
+	
 	public static FileHandle getRelativeFileHandle(FileHandle file, String path){
 		StringTokenizer tokenizer = new StringTokenizer(path, "\\/");
 		FileHandle result = file.parent();
@@ -33,12 +33,14 @@ public abstract class Utils
 		}
 		return result;
 	}
+	
 	public static <T> void insertAllFirst(Array<T> a, Array<T> b){
 		Array<T> c = new Array<T>(a);
 		a.clear();
 		a.addAll(b);
 		a.addAll(c);
 	}
+	
 	public static Interpolation constant = new Interpolation(){
 		@Override
 		public float apply(float alpha){
@@ -54,6 +56,7 @@ public abstract class Utils
 			}
 		return constant;
 	}
+	
 	private static long lastTimeNanos;
 	public static float time(){
 		float rtn = (float)TimeUtils.timeSinceNanos(lastTimeNanos) / 1000000f;

@@ -58,4 +58,10 @@ public class LayeredTextureRegion extends Array<TextureRegion>{
 	public void draw(Batch batch, float x, float y, float width, float height){
 		draw(batch, x, y, 0, 0, width, height, 1, 1, 0);
 	}
+	
+	public void dispose(){
+		for(TextureRegion reg : this)
+			if(reg != null)
+				reg.getTexture().dispose();
+	}
 }

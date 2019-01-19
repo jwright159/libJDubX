@@ -111,44 +111,23 @@ public abstract class WActor extends Actor implements Disposable{
 		public void draw(Batch batch, float parentAlpha){
 			region.draw(batch, getX(), getY(), getWidth(), getHeight(), getScaleX(), getScaleY());
 		}
-	}
 
-	public static abstract class WShape extends WActor{
-		protected ShapeRenderer renderer;
-		public WShape(){
-			renderer = new ShapeRenderer();
-		}
-		
 		@Override
 		public void dispose(){
 			super.dispose();
-			renderer.dispose();
+			region.dispose();
 		}
-
-		@Override
-		public void draw(Batch batch, float parentAlpha){
-			batch.end();
-			Gdx.gl.glEnable(GL20.GL_BLEND);
-			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-			renderer.begin(ShapeRenderer.ShapeType.Filled);
-			drawShapes();
-			renderer.end();
-			Gdx.gl.glDisable(GL20.GL_BLEND);
-			batch.begin();
-		}
-
-		public abstract void drawShapes();
 	}
 
-	public static class WRect extends WShape{
-		private Color fillColor,borderColor;
-		private float borderWidth;
+	public static class WRect extends WActor{
+		private TextureRegion fill, border;
 		private int borderAlign;
+		private float borderWidth;
 		
 		public WRect(Rectangle r, Color fillColor, Color borderColor, float borderWidth, int borderAlign){
 			setRect(r);
-			this.fillColor = fillColor;
-			this.borderColor = borderColor;
+			setFill(fillColor);
+			setBorder(borderColor);
 			this.borderWidth = borderWidth;
 			this.borderAlign = borderAlign;
 		}
@@ -158,39 +137,41 @@ public abstract class WActor extends Actor implements Disposable{
 		public WRect(Rectangle r, Color fillColor){
 			this(r, fillColor, Color.CLEAR, 0);
 		}
+		
+		public void setFill(Color color){
+			if(fill != null)
+				fill.getTexture().dispose();
+			Pixmap c = new Pixmap(1,1,Pixmap.Format.RGBA8888);
+			c.setColor(color); c.fill();
+			fill = new TextureRegion(new Texture(c));
+		}
+		public void setBorder(Color color){
+			if(border != null)
+				border.getTexture().dispose();
+			Pixmap c = new Pixmap(1,1,Pixmap.Format.RGBA8888);
+			c.setColor(color); c.fill();
+			border = new TextureRegion(new Texture(c));
+		}
 
 		@Override
-		public void drawShapes(){
-			if(fillColor != Color.CLEAR){
-				renderer.setColor(fillColor);
-				renderer.rect(getX(), getY(), getWidth(), getHeight());
+		public void draw(Batch batch, float parentAlpha){
+			if(Align.isLeft(borderAlign)){
+				batch.draw(border, getX()-borderWidth, getY()-borderWidth, getWidth()+borderWidth*2, getHeight()+borderWidth*2);
+				batch.draw(fill, getX(), getY(), getWidth(), getHeight());
+			}else if(Align.isCenterVertical(borderAlign)){
+				batch.draw(border, getX()-borderWidth/2, getY()-borderWidth/2, getWidth()+borderWidth, getHeight()+borderWidth);
+				batch.draw(fill, getX()+borderWidth/2, getY()+borderWidth/2, getWidth()-borderWidth, getHeight()-borderWidth);
+			}else if(Align.isRight(borderAlign)){
+				batch.draw(border, getX(), getY(), getWidth(), getHeight());
+				batch.draw(fill, getX()+borderWidth, getY()+borderWidth, getWidth()-borderWidth*2, getHeight()-borderWidth*2);
 			}
-			
-			if(borderWidth != 0 && borderColor != Color.CLEAR){
-				renderer.end();
-				renderer.begin(ShapeRenderer.ShapeType.Line);
-				renderer.setColor(borderColor);
-				Gdx.gl.glLineWidth(borderWidth);
-				
-				//bottom, left, top, right
-				if(borderAlign == Align.left){
-					renderer.line(getX()-borderWidth, getY()-borderWidth/2, getX()+getWidth()+borderWidth, getY()-borderWidth/2);
-					renderer.line(getX()-borderWidth/2, getY(), getX()-borderWidth/2, getY()+getHeight());
-					renderer.line(getX()-borderWidth, getY()+getHeight()+borderWidth/2, getX()+getWidth()+borderWidth, getY()+getHeight()+borderWidth/2);
-					renderer.line(getX()+getWidth()+borderWidth/2, getY(), getX()+getWidth()+borderWidth/2, getY()+getHeight());
-				}else if(borderAlign == Align.center){
-					renderer.line(getX()-borderWidth/2, getY(), getX()+getWidth()+borderWidth/2, getY());
-					renderer.line(getX(), getY(), getX(), getY()+getHeight());
-					renderer.line(getX()-borderWidth/2, getY()+getHeight(), getX()+getWidth()+borderWidth/2, getY()+getHeight());
-					renderer.line(getX()+getWidth(), getY(), getX()+getWidth(), getY()+getHeight());
-				}else if(borderAlign == Align.right){
-					renderer.line(getX(), getY()+borderWidth/2, getX()+getWidth(), getY()+borderWidth/2);
-					renderer.line(getX()+borderWidth/2, getY(), getX()+borderWidth/2, getY()+getHeight());
-					renderer.line(getX(), getY()+getHeight()-borderWidth/2, getX()+getWidth(), getY()+getHeight()-borderWidth/2);
-					renderer.line(getX()+getWidth()-borderWidth/2, getY(), getX()+getWidth()-borderWidth/2, getY()+getHeight());
-				}else
-					throw new IllegalArgumentException("WRect border alignments can only be left (outside), center, or right (inside)");
-			}//dont end it, done next in wshape
+		}
+
+		@Override
+		public void dispose(){
+			super.dispose();
+			fill.getTexture().dispose();
+			border.getTexture().dispose();
 		}
 	}
 }
