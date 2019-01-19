@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 public class WScreen implements Screen{
 	protected Stage worldStage, uiStage;
@@ -12,6 +13,9 @@ public class WScreen implements Screen{
 	private boolean isShowing, isRunning;
 	protected InputMultiplexer multiplexer;
 	protected float delta;
+	protected Skin skin;
+	private TextureAtlas skinta;
+	protected Table table;
 
 	public WScreen(){
 		worldStage = new Stage(new ScreenViewport());
@@ -19,6 +23,9 @@ public class WScreen implements Screen{
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
 		multiplexer.addProcessor(worldStage);
+		skin = new WSkin(Gdx.files.internal("uiskin.json"), skinta = new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+		uiStage.addActor(table = new Table(skin));
+		table.setFillParent(true);
 	}
 
 	@Override
@@ -48,6 +55,12 @@ public class WScreen implements Screen{
 	public OrthographicCamera getCamera(){
 		return (OrthographicCamera)worldStage.getCamera();
 	}
+	public Skin getSkin(){
+		return skin;
+	}
+	public Table getTable(){
+		return table;
+	}
 	
 	@Override
 	public void dispose(){
@@ -63,6 +76,8 @@ public class WScreen implements Screen{
 					((WActor)actor).dispose();
 			uiStage.dispose();
 		}
+		skin.dispose();
+		skinta.dispose();
 	}
 
 	@Override

@@ -13,6 +13,9 @@ public class WSkin extends Skin{
 	public WSkin(){
 		super();
 	}
+	public WSkin(FileHandle json, TextureAtlas atlas){
+		super(json, atlas);
+	}
 	/** Overridden to do NineRegions */
 	@Override
 	public NinePatch getPatch(String name){
