@@ -2,8 +2,6 @@ package wrightway.gdx;
 
 import com.badlogic.gdx.utils.*;
 import java.util.*;
-import com.badlogic.gdx.utils.reflect.*;
-import wrightway.gdx.JVSValue.*;
 
 public final class JVSParser{
 	public static JVSValue.Function parseCode(String code, String[] args){
@@ -189,38 +187,6 @@ public final class JVSParser{
 					JVSValue.Function inner = parseFunctionConstruction();
 					x = new JVSValue.For(key, val, arr, inner);
 					break;
-
-				case "new":
-					kw = parseKeyword();
-					final Object[] newArgs = parseArguments();
-					/*try{
-					 x = ClassReflection.getMethod(Mappack.class, "load"+kw, String.class).invoke(Log.mp, newArgs[0].toString());
-					 }catch(ReflectionException e){
-					 throw new RuntimeException("Have no internal object "+kw+" or no internal constructor that takes only a file name: "+e);
-					 }*/
-					/*x = Log.mp.loadProjectile(newArgs[0].toString());
-					 ((Function)((Scoped)x).getVar(newArgs[0].toString())).doRun(Arrays.copyOfRange(newArgs, 1, newArgs.length), (Scoped)x);*/
-					switch(kw){
-						/*case "NPC":
-							x = new JVSValue(){
-								@Override
-								public Object get(Scope scope){
-									return Log.mp.loadNPC(newArgs[0].toString()).vars;
-								}
-							};
-							break;*/
-							/*case "Projectile":
-							 x = new JVSValue(){
-							 @Override
-							 public Object get(Scope scope){
-							 return Log.mp.loadProjectile(newArgs[0].toString());
-							 }
-							 };
-							 break;*/
-						default:
-							throw new UnsupportedOperationException("Class making isn't implemented yet");
-					}
-					//break;//cant be reached now
 
 				case ""://??? for parends and brackets after other parends or brackets or braces???
 					//	x = parseValue();
