@@ -52,6 +52,12 @@ public class WScreen implements Screen{
 	public void act(float delta){}
 	public void draw(){}
 	
+	public Stage getStage(){
+		return worldStage;
+	}
+	public Stage getUiStage(){
+		return uiStage;
+	}
 	public OrthographicCamera getCamera(){
 		return (OrthographicCamera)worldStage.getCamera();
 	}
