@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.*;
 import java.util.*;
+import com.badlogic.gdx.maps.objects.*;
 
 public abstract class Utils{
 	public static String[] trimArray(String[] array){
@@ -32,6 +33,17 @@ public abstract class Utils{
 			}
 		}
 		return result;
+	}
+	
+	public static RectangleMapObject copyRectangleMapObject(RectangleMapObject o){
+		RectangleMapObject r = new RectangleMapObject();
+		r.setColor(o.getColor());
+		r.setName(o.getName());
+		r.setOpacity(o.getOpacity());
+		r.setVisible(o.isVisible());
+		r.getRectangle().set(o.getRectangle());
+		r.getProperties().putAll(o.getProperties());
+		return r;
 	}
 	
 	public static <T> void insertAllFirst(Array<T> a, Array<T> b){
