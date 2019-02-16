@@ -61,6 +61,9 @@ public class WSkin extends Skin{
 
 		return newDrawable;
 	}
+	/** Overriden to do FreeTypeFonts
+	 * By raeleus at https://github.com/raeleus/Pen-to-the-Paper-UI, released under the MIT license
+	*/
 	@Override
 	protected Json getJsonLoader(final FileHandle skinFile){
 		Json json = super.getJsonLoader(skinFile);
