@@ -28,7 +28,7 @@ public class WSkin extends Skin{
 			if(region instanceof TextureAtlas.AtlasRegion){
 				int[] splits = ((TextureAtlas.AtlasRegion)region).splits;
 				if(splits != null){
-					patch = regionTiles(region) ? new NinePatch(region, splits[0], splits[1], splits[2], splits[3]) : new NinePatch(region, splits[0], splits[1], splits[2], splits[3]);
+					patch = regionTiles(region) ? new NineRegion(region, splits[0], splits[1], splits[2], splits[3]) : new NinePatch(region, splits[0], splits[1], splits[2], splits[3]);
 					int[] pads = ((TextureAtlas.AtlasRegion)region).pads;
 					if(pads != null) patch.setPadding(pads[0], pads[1], pads[2], pads[3]);
 				}
@@ -126,6 +126,8 @@ public class WSkin extends Skin{
 	}
 	
 	public static boolean regionTiles(TextureRegion region){
+		//if(Log.getLogWriter() != null)
+			//Log.debug("Region", region.toString(), region instanceof NineRegionTextureAtlas.NineRegionAtlasRegion, region instanceof NineRegionTextureAtlas.NineRegionAtlasRegion ? ((NineRegionTextureAtlas.NineRegionAtlasRegion)region).tile : "n");
 		return region instanceof NineRegionTextureAtlas.NineRegionAtlasRegion && ((NineRegionTextureAtlas.NineRegionAtlasRegion)region).tile;
 	}
 }
