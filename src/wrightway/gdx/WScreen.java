@@ -8,33 +8,36 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 public class WScreen implements Screen{
-	protected Stage worldStage, uiStage;
-	public static float b = 0.0f, bb = b;
+	private Stage worldStage, uiStage;
 	private boolean isShowing, isRunning;
-	protected InputMultiplexer multiplexer;
-	protected float delta;
-	protected Skin skin;
+	private InputMultiplexer multiplexer;
+	private Skin skin;
 	private TextureAtlas skinta;
-	protected Table table;
+	private Table table;
 
-	public WScreen(){
+	public WScreen(Stage otherUiStage){
 		worldStage = new Stage(new ScreenViewport());
-		uiStage = new Stage(new ScreenViewport());
+		if(uiStage != null)
+			uiStage = otherUiStage;
+		else
+			uiStage = new Stage(new ScreenViewport());
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
 		multiplexer.addProcessor(worldStage);
-		skin = new WSkin(Gdx.files.internal("uiskin.json"), skinta = new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+		skin = new WSkin(Gdx.files.internal("uiskin.json"), skinta = new NineRegionTextureAtlas(Gdx.files.internal("uiskin.atlas")));
 		uiStage.addActor(table = new Table(skin));
 		table.setFillParent(true);
+	}
+	public WScreen(){
+		this(null);
 	}
 
 	@Override
 	public void render(float delta){
 		if(isShowing){
-			Gdx.gl.glClearColor(b, b, b, 1);
+			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		}
-		b = bb;
 
 		if(isRunning){
 			act(delta);
@@ -61,6 +64,9 @@ public class WScreen implements Screen{
 	public OrthographicCamera getCamera(){
 		return (OrthographicCamera)worldStage.getCamera();
 	}
+	public InputMultiplexer getMultiplexer(){
+		return multiplexer;
+	}
 	public Skin getSkin(){
 		return skin;
 	}
@@ -68,15 +74,12 @@ public class WScreen implements Screen{
 		return table;
 	}
 	
-	@Override
-	public void dispose(){
-		if(worldStage != null){
-			for(Actor actor : worldStage.getActors())
-				if(actor instanceof WActor)
-					((WActor)actor).dispose();
-			worldStage.dispose();
-		}
-		if(uiStage != null){
+	public void dispose(boolean disposeUi){
+		for(Actor actor : worldStage.getActors())
+			if(actor instanceof WActor)
+				((WActor)actor).dispose();
+		worldStage.dispose();
+		if(disposeUi){
 			for(Actor actor : uiStage.getActors())
 				if(actor instanceof WActor)
 					((WActor)actor).dispose();
@@ -84,6 +87,10 @@ public class WScreen implements Screen{
 		}
 		skin.dispose();
 		skinta.dispose();
+	}
+	@Override
+	public void dispose(){
+		dispose(true);
 	}
 
 	@Override

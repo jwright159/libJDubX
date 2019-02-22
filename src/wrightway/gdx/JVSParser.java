@@ -187,7 +187,7 @@ public final class JVSParser{
 					JVSValue.Function inner = parseFunctionConstruction();
 					x = new JVSValue.For(key, val, arr, inner);
 					break;
-
+				
 				case ""://??? for parends and brackets after other parends or brackets or braces???
 					//	x = parseValue();
 					break;

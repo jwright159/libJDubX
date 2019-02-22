@@ -1,4 +1,5 @@
 package wrightway.gdx;
+
 import com.badlogic.gdx.files.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -27,12 +28,12 @@ public class WSkin extends Skin{
 			if(region instanceof TextureAtlas.AtlasRegion){
 				int[] splits = ((TextureAtlas.AtlasRegion)region).splits;
 				if(splits != null){
-					patch = new NineRegion(region, splits[0], splits[1], splits[2], splits[3]);
+					patch = regionTiles(region) ? new NinePatch(region, splits[0], splits[1], splits[2], splits[3]) : new NinePatch(region, splits[0], splits[1], splits[2], splits[3]);
 					int[] pads = ((TextureAtlas.AtlasRegion)region).pads;
 					if(pads != null) patch.setPadding(pads[0], pads[1], pads[2], pads[3]);
 				}
 			}
-			if(patch == null) patch = new NineRegion(region);
+			if(patch == null) patch = regionTiles(region) ? new NineRegion(region) : new NinePatch(region);
 			add(name, patch, NinePatch.class);
 			return patch;
 		}catch(GdxRuntimeException ex){
@@ -45,7 +46,7 @@ public class WSkin extends Skin{
 		if(drawable instanceof TextureRegionDrawable)
 			newDrawable = ((TextureRegionDrawable)drawable).tint(tint);
 		else if(drawable instanceof NinePatchDrawable)
-			newDrawable = NineRegion.tint((NinePatchDrawable)drawable, tint);
+			newDrawable = ((NinePatchDrawable)drawable).getPatch() instanceof NineRegion ? NineRegion.tint((NinePatchDrawable)drawable, tint) : ((NinePatchDrawable)drawable).tint(tint);
 		else if(drawable instanceof SpriteDrawable)
 			newDrawable = ((SpriteDrawable)drawable).tint(tint);
 		else
@@ -122,5 +123,9 @@ public class WSkin extends Skin{
 			});
 
 		return json;
+	}
+	
+	public static boolean regionTiles(TextureRegion region){
+		return region instanceof NineRegionTextureAtlas.NineRegionAtlasRegion && ((NineRegionTextureAtlas.NineRegionAtlasRegion)region).tile;
 	}
 }
