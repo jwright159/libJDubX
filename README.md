@@ -1,4 +1,4 @@
 # libJDubX
-My libGDX stuff
+My supplement for libGDX
 
-???2
+http://www.wrightwaycreations.x10host.com/libjdubx
