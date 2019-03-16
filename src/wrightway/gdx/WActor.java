@@ -93,6 +93,7 @@ public abstract class WActor extends Actor implements Disposable{
 
 		public void setRegion(int i, TextureRegion region){
 			this.region.set(i, region);
+			//Log.debug("Set skin dims:", this.region.getRegionWidth(), this.region.getRegionHeight());
 			setBounds(getX(), getY(), this.region.getRegionWidth(), this.region.getRegionHeight());
 		}
 		public TextureRegion getRegion(int i){
@@ -100,6 +101,7 @@ public abstract class WActor extends Actor implements Disposable{
 		}
 		public TextureRegion removeRegion(int i){
 			TextureRegion rtn = region.removeIndex(i);
+			//Log.debug("Removed skin dims:", region.getRegionWidth(), region.getRegionHeight());
 			setBounds(getX(), getY(), region.getRegionWidth(), region.getRegionHeight());
 			return rtn;
 		}
