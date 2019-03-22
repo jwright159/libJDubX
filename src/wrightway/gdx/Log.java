@@ -85,7 +85,7 @@ public abstract class Log{
 
 		try{
 			logFile.write("\n" + tag.substring(0, tag.length() - 1) + ": " + stringify(msg));
-			if((t & 0b111_1110) == 0)
+			if((t & 0b000_1111) != 0)
 				logFile.flush();
 		}catch(IOException e){}
 	}

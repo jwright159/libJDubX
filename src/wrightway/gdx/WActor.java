@@ -34,6 +34,29 @@ public abstract class WActor extends Actor implements Disposable{
 	public float getTrueHeight(){
 		return getHeight() * getScaleY();
 	}
+	
+	public void scaleSizeBy(float scale){
+		setWidth(getWidth()*scale);
+		setHeight(getHeight()*scale);
+	}
+	
+	public boolean clamp(float xmin, float xmax, float ymin, float ymax){
+		boolean did = false;
+		if(getX() < xmin){
+			setX(xmin);
+			did = true;
+		}else if(getX()+getWidth() > xmax){
+			setX(xmax - getWidth());
+			did = true;
+		}if(getY() < ymin){
+			setY(ymin);
+			did = true;
+		}else if(getY()+getHeight() > ymax){
+			setY(ymax - getHeight());
+			did = true;
+		}
+		return did;
+	}
 
 	@Override
 	public abstract void draw(Batch batch, float parentAlpha)
@@ -109,9 +132,13 @@ public abstract class WActor extends Actor implements Disposable{
 			return region;
 		}
 		
+		private Color tmp = new Color();
 		@Override
 		public void draw(Batch batch, float parentAlpha){
-			region.draw(batch, getX(), getY(), getWidth(), getHeight(), getScaleX(), getScaleY());
+			tmp.set(batch.getColor());
+			batch.setColor(batch.getColor().mul(getColor()));
+			region.draw(batch, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+			batch.getColor().set(tmp);
 		}
 
 		@Override
