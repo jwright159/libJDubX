@@ -106,7 +106,7 @@ public abstract class WActor extends Actor implements Disposable{
 		public WTexture(LayeredTextureRegion region){
 			super();
 			this.region = region;
-			setBounds(getX(), getY(), this.region.getRegionWidth(), this.region.getRegionHeight());
+			setBounds(getX(), getY(), region.getRegionWidth(), region.getRegionHeight());
 		}
 		public WTexture(WTexture sprite){
 			this(sprite.region);
@@ -114,18 +114,18 @@ public abstract class WActor extends Actor implements Disposable{
 			setScale(sprite.getScaleX(), sprite.getScaleY());
 		}
 
-		public void setRegion(int i, TextureRegion region){
-			this.region.set(i, region);
-			//Log.debug("Set skin dims:", this.region.getRegionWidth(), this.region.getRegionHeight());
-			setBounds(getX(), getY(), this.region.getRegionWidth(), this.region.getRegionHeight());
+		public void setRegion(int i, TextureRegion newRegion){
+			float width = region.getRegionWidth(), height = region.getRegionHeight();
+			region.set(i, newRegion);
+			setSize(width == 0 ? region.getRegionWidth() : getWidth() * region.getRegionWidth() / width, height == 0 ? region.getRegionHeight() : getHeight() * region.getRegionHeight() / height);
 		}
 		public TextureRegion getRegion(int i){
 			return region.get(i);
 		}
 		public TextureRegion removeRegion(int i){
+			float width = region.getRegionWidth(), height = region.getRegionHeight();
 			TextureRegion rtn = region.removeIndex(i);
-			//Log.debug("Removed skin dims:", region.getRegionWidth(), region.getRegionHeight());
-			setBounds(getX(), getY(), region.getRegionWidth(), region.getRegionHeight());
+			setSize(width == 0 ? region.getRegionWidth() : getWidth() * region.getRegionWidth() / width, height == 0 ? region.getRegionHeight() : getHeight() * region.getRegionHeight() / height);
 			return rtn;
 		}
 		public LayeredTextureRegion getRegions(){
