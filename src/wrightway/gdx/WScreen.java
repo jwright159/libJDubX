@@ -15,12 +15,9 @@ public class WScreen implements Screen{
 	private TextureAtlas skinta;
 	private Table table;
 
-	public WScreen(Stage otherUiStage){
-		worldStage = new Stage(new ScreenViewport());
-		if(uiStage != null)
-			uiStage = otherUiStage;
-		else
-			uiStage = new Stage(new ScreenViewport());
+	public WScreen(Stage otherWorldStage, Stage otherUiStage){
+		worldStage = otherWorldStage == null ? new Stage(new ScreenViewport()) : otherWorldStage;
+		uiStage = otherUiStage == null ? new Stage(new ScreenViewport()) : otherUiStage;
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
 		multiplexer.addProcessor(worldStage);
@@ -28,8 +25,25 @@ public class WScreen implements Screen{
 		uiStage.addActor(table = new Table(skin));
 		table.setFillParent(true);
 	}
+	public WScreen(ScalingViewport worldView, ScalingViewport uiView){
+		this(new Stage(worldView == null ? new ScreenViewport() : worldView), new Stage(uiView == null ? new ScreenViewport() : uiView));
+	}
+	
+	public WScreen(Stage otherWorldStage, ScalingViewport uiView){
+		this(otherWorldStage, new Stage(uiView == null ? new ScreenViewport() : uiView));
+	}
+	public WScreen(ScalingViewport worldView, Stage otherUiStage){
+		this(new Stage(worldView == null ? new ScreenViewport() : worldView), otherUiStage);
+	}
+	
+	public WScreen(Stage otherUiStage){
+		this((Stage)null, otherUiStage);
+	}
+	public WScreen(ScalingViewport view){
+		this(view, view == null ? null : new ScalingViewport(view.getScaling(), view.getWorldWidth(), view.getWorldHeight()));
+	}
 	public WScreen(){
-		this(null);
+		this((Stage)null, (Stage)null);
 	}
 
 	@Override
