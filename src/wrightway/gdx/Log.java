@@ -19,6 +19,13 @@ public abstract class Log{
 		return verbosity;
 	}
 	public static void setLogFile(FileHandle file){
+		if(logFile != null){
+			debug("Switching log file to", file.path());
+			try{
+				logFile.close();
+			}catch(IOException e){}
+			logFile = null;
+		}
 		setLogWriter(file.writer(false));
 	}
 	public static void setLogWriter(Writer w){
