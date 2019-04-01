@@ -45,7 +45,7 @@ public class OrthogonalExtendedTiledMapRenderer extends OrthogonalTiledMapRender
 		float xStart = col0 * layerTileWidth + layerOffsetX;
 		final float[] vertices = this.vertices;
 
-		Log.debug(col0, col1, col2, col3, row0, row1, row2, row3, xStart, y);
+		//Log.debug(col0, col1, col2, col3, row0, row1, row2, row3, xStart, y);
 
 		for(int row = row3; row >= row0; row--){
 			float x = xStart;
