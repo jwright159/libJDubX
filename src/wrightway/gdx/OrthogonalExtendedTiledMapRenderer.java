@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.renderers.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import static com.badlogic.gdx.graphics.g2d.Batch.*;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.*;
 
 public class OrthogonalExtendedTiledMapRenderer extends OrthogonalTiledMapRenderer{
 	public OrthogonalExtendedTiledMapRenderer(TiledMap map){
@@ -14,6 +15,12 @@ public class OrthogonalExtendedTiledMapRenderer extends OrthogonalTiledMapRender
 	}
 	public OrthogonalExtendedTiledMapRenderer(TiledMap map, float unitScale){
 		super(map, unitScale);
+	}
+	public OrthogonalExtendedTiledMapRenderer(TiledMap map, Batch batch){
+		super(map, batch);
+	}
+	public OrthogonalExtendedTiledMapRenderer(TiledMap map, float unitScale, Batch batch){
+		super(map, unitScale, batch);
 	}
 	
 	@Override
@@ -50,7 +57,7 @@ public class OrthogonalExtendedTiledMapRenderer extends OrthogonalTiledMapRender
 		for(int row = row3; row >= row0; row--){
 			float x = xStart;
 			for(int col = col0; col < col3; col++){
-				final Cell cell = layer.getCell(Math.min(Math.max(col, col1), col2-1), Math.min(Math.max(row, row1), row2-1));
+				final Cell cell = layer.getCell(MathUtils.clamp(col, col1, col2-1), MathUtils.clamp(row, row1, row2-1));
 				//Log.debug("Cell", col, row, Math.min(Math.max(col, col1), col2-1), Math.min(Math.max(row, row1), row2-1));
 				if(cell == null){
 					//Log.debug("Null");
