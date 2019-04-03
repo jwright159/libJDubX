@@ -136,7 +136,7 @@ public abstract class WActor extends Actor implements Disposable{
 		@Override
 		public void draw(Batch batch, float parentAlpha){
 			tmp.set(batch.getColor());
-			batch.setColor(batch.getColor().mul(getColor()));
+			batch.getColor().mul(getColor());
 			region.draw(batch, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 			batch.getColor().set(tmp);
 		}
