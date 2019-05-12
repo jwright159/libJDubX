@@ -16,13 +16,25 @@ import com.badlogic.gdx.utils.*;
 public abstract class WActor extends Actor implements Disposable{
 	public WActor(){
 		addListener(new WActorGestureListener());
-		rectBuffer = new Rectangle();
+	}
+	public WActor(Actor actor){
+		this();
+		setBounds(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+		setScale(actor.getScaleX(), actor.getScaleY());
+		setName(actor.getName());
+		setTouchable(actor.getTouchable());
+		setOrigin(actor.getOriginX(), actor.getOriginY());
+		setDebug(actor.getDebug());
+		setVisible(actor.isVisible());
+		setColor(actor.getColor());
+		setUserObject(actor.getUserObject());
+		setRotation(actor.getRotation());
 	}
 
 	public void setRect(Rectangle rect){
 		setBounds(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 	}
-	private Rectangle rectBuffer;
+	private Rectangle rectBuffer = new Rectangle();
 	public Rectangle toRect(){
 		rectBuffer.set(getX(), getY(), getTrueWidth(), getTrueHeight());
 		return rectBuffer;
@@ -33,6 +45,25 @@ public abstract class WActor extends Actor implements Disposable{
 	}
 	public float getTrueHeight(){
 		return getHeight() * getScaleY();
+	}
+
+	@Override
+	public float getX(int alignment){
+		if(Align.isLeft(alignment))
+			return getX();
+		else if(Align.isRight(alignment))
+			return getX() + getTrueWidth();
+		else
+			return getX() + getTrueWidth() / 2;
+	}
+	@Override
+	public float getY(int alignment){
+		if(Align.isBottom(alignment))
+			return getY();
+		else if(Align.isTop(alignment))
+			return getY() + getTrueHeight();
+		else
+			return getY() + getTrueHeight() / 2;
 	}
 	
 	public void scaleSizeBy(float scale){
@@ -60,7 +91,6 @@ public abstract class WActor extends Actor implements Disposable{
 
 	@Override
 	public abstract void draw(Batch batch, float parentAlpha)
-
 	
 	@Override
 	public void dispose(){
@@ -90,117 +120,6 @@ public abstract class WActor extends Actor implements Disposable{
 		@Override
 		public void tap(InputEvent event, float x, float y, int count, int button){
 			WActor.this.tap(x, y, count, button);
-		}
-	}
-
-	public static class WTexture extends WActor{
-		private LayeredTextureRegion region;
-		public WTexture(){
-			super();
-			region = new LayeredTextureRegion();
-		}
-		public WTexture(TextureRegion region){
-			this();
-			setRegion(0, region);
-		}
-		public WTexture(LayeredTextureRegion region){
-			super();
-			this.region = region;
-			setBounds(getX(), getY(), region.getRegionWidth(), region.getRegionHeight());
-		}
-		public WTexture(WTexture sprite){
-			this(sprite.region);
-			setBounds(getX(), getY(), sprite.getWidth(), sprite.getHeight());
-			setScale(sprite.getScaleX(), sprite.getScaleY());
-		}
-
-		public void setRegion(int i, TextureRegion newRegion){
-			float width = region.getRegionWidth(), height = region.getRegionHeight();
-			region.set(i, newRegion);
-			setSize(width == 0 ? region.getRegionWidth() : getWidth() * region.getRegionWidth() / width, height == 0 ? region.getRegionHeight() : getHeight() * region.getRegionHeight() / height);
-		}
-		public TextureRegion getRegion(int i){
-			return region.get(i);
-		}
-		public TextureRegion removeRegion(int i){
-			float width = region.getRegionWidth(), height = region.getRegionHeight();
-			TextureRegion rtn = region.removeIndex(i);
-			setSize(width == 0 ? region.getRegionWidth() : getWidth() * region.getRegionWidth() / width, height == 0 ? region.getRegionHeight() : getHeight() * region.getRegionHeight() / height);
-			return rtn;
-		}
-		public LayeredTextureRegion getRegions(){
-			return region;
-		}
-		
-		private Color tmp = new Color();
-		@Override
-		public void draw(Batch batch, float parentAlpha){
-			tmp.set(batch.getColor());
-			batch.getColor().mul(getColor());
-			region.draw(batch, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-			batch.getColor().set(tmp);
-		}
-
-		@Override
-		public void dispose(){
-			super.dispose();
-			region.dispose();
-		}
-	}
-
-	public static class WRect extends WActor{
-		private TextureRegion fill, border;
-		private int borderAlign;
-		private float borderWidth;
-		
-		public WRect(Rectangle r, Color fillColor, Color borderColor, float borderWidth, int borderAlign){
-			setRect(r);
-			setFill(fillColor);
-			setBorder(borderColor);
-			this.borderWidth = borderWidth;
-			this.borderAlign = borderAlign;
-		}
-		public WRect(Rectangle r, Color fillColor, Color borderColor, float borderWidth){
-			this(r, fillColor, borderColor, borderWidth, Align.center);
-		}
-		public WRect(Rectangle r, Color fillColor){
-			this(r, fillColor, Color.CLEAR, 0);
-		}
-		
-		public void setFill(Color color){
-			if(fill != null)
-				fill.getTexture().dispose();
-			Pixmap c = new Pixmap(1,1,Pixmap.Format.RGBA8888);
-			c.setColor(color); c.fill();
-			fill = new TextureRegion(new Texture(c));
-		}
-		public void setBorder(Color color){
-			if(border != null)
-				border.getTexture().dispose();
-			Pixmap c = new Pixmap(1,1,Pixmap.Format.RGBA8888);
-			c.setColor(color); c.fill();
-			border = new TextureRegion(new Texture(c));
-		}
-
-		@Override
-		public void draw(Batch batch, float parentAlpha){
-			if(Align.isLeft(borderAlign)){
-				batch.draw(border, getX()-borderWidth, getY()-borderWidth, getWidth()+borderWidth*2, getHeight()+borderWidth*2);
-				batch.draw(fill, getX(), getY(), getWidth(), getHeight());
-			}else if(Align.isCenterVertical(borderAlign)){
-				batch.draw(border, getX()-borderWidth/2, getY()-borderWidth/2, getWidth()+borderWidth, getHeight()+borderWidth);
-				batch.draw(fill, getX()+borderWidth/2, getY()+borderWidth/2, getWidth()-borderWidth, getHeight()-borderWidth);
-			}else if(Align.isRight(borderAlign)){
-				batch.draw(border, getX(), getY(), getWidth(), getHeight());
-				batch.draw(fill, getX()+borderWidth, getY()+borderWidth, getWidth()-borderWidth*2, getHeight()-borderWidth*2);
-			}
-		}
-
-		@Override
-		public void dispose(){
-			super.dispose();
-			fill.getTexture().dispose();
-			border.getTexture().dispose();
 		}
 	}
 }
