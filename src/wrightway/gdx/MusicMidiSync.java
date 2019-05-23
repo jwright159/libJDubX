@@ -15,38 +15,58 @@ public class MusicMidiSync implements Disposable{
 	private Music music;
 	private MidiProcessor midipro;
 	private float pMs;
+	private boolean looping;
 	
 	public MusicMidiSync(Music music, MidiFile midi, MidiEventListener noteOn, MidiEventListener noteOff){
 		this.music = music;
+		looping = music.isLooping();
+		music.setLooping(false);
+		music.setOnCompletionListener(new Music.OnCompletionListener(){
+				@Override
+				public void onCompletion(Music p1){
+					Log.verbose("Completed music", MusicMidiSync.this, p1);
+					stop();
+					if(looping)
+						play();
+				}
+			});
 		this.midi = midi;
-		midipro = new MidiProcessor(midi);
-		if(noteOn != null)
-			midipro.registerEventListener(noteOn, NoteOn.class);
-		if(noteOff != null)
-			midipro.registerEventListener(noteOff, NoteOff.class);
+		if(midi != null){
+			midipro = new MidiProcessor(midi);
+			if(noteOn != null)
+				midipro.registerEventListener(noteOn, NoteOn.class);
+			if(noteOff != null)
+				midipro.registerEventListener(noteOff, NoteOff.class);
+		}
 	}
 	public MusicMidiSync(Music music, MidiFile midi, MidiEventListener noteOn){
 		this(music, midi, noteOn, null);
 	}
+	public MusicMidiSync(Music music){
+		this(music, null, null, null);
+	}
 	
 	public void play(){
 		music.play();
-		midipro.start();
+		if(midipro != null)
+			midipro.start();
 	}
 	
 	public void stop(){
 		music.stop();
-		midipro.stop();
-		midipro.reset();
+		if(midipro != null)
+			midipro.reset();
 	}
 	
 	public void pause(){
 		music.pause();
-		midipro.stop();
+		if(midipro != null)
+			midipro.stop();
 	}
 	
 	public void setPosition(float pos){
 		music.setPosition(pos);
+		sync();
 	}
 	public float getPosition(){
 		return music.getPosition();
@@ -63,7 +83,10 @@ public class MusicMidiSync implements Disposable{
 		return music.isPlaying();
 	}
 
-	public void sync(){
+	protected void sync(){
+		if(midipro == null)
+			return;
+		
 		float ms = music.getPosition();
 		if(ms < pMs){
 			midipro.reset();
@@ -76,7 +99,8 @@ public class MusicMidiSync implements Disposable{
 	@Override
 	public void dispose(){
 		stop();
-		midipro.unregisterAllEventListeners();
+		if(midipro != null)
+			midipro.unregisterAllEventListeners();
 		music.dispose();
 	}
 }
