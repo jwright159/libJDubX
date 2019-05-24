@@ -75,4 +75,8 @@ public abstract class Utils{
 		lastTimeNanos = TimeUtils.nanoTime();
 		return rtn;
 	}
+	
+	public static String filename(String fullfile){
+		return fullfile.contains(".") ? fullfile.substring(0, fullfile.lastIndexOf('.')) : fullfile;
+	}
 }
