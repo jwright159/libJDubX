@@ -1,5 +1,7 @@
 package wrightway.gdx;
 
+import wrightway.gdx.actor.ScreenActor;
+import wrightway.gdx.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.*;
@@ -7,7 +9,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
-public class GUIScreen implements Screen{
+public class GuiScreen implements Screen{
 	private Stage stage;
 	private boolean isShowing, isRunning;
 	private InputMultiplexer multiplexer;
@@ -15,7 +17,7 @@ public class GUIScreen implements Screen{
 	private TextureAtlas skinta;
 	private Table table;
 
-	public GUIScreen(Stage otherStage){
+	public GuiScreen(Stage otherStage){
 		stage = otherStage == null ? new Stage(new ScreenViewport()) : otherStage;
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);
@@ -23,10 +25,10 @@ public class GUIScreen implements Screen{
 		stage.addActor(table = new Table(skin));
 		table.setFillParent(true);
 	}
-	public GUIScreen(ScalingViewport view){
+	public GuiScreen(ScalingViewport view){
 		this(new Stage(view == null ? new ScreenViewport() : view));
 	}
-	public GUIScreen(){
+	public GuiScreen(){
 		this((Stage)null);
 	}
 

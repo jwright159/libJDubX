@@ -1,5 +1,6 @@
-package wrightway.gdx;
+package wrightway.gdx.actor;
 
+import wrightway.gdx.graphics.LayeredTextureRegion;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 

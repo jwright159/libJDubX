@@ -1,4 +1,4 @@
-package wrightway.gdx;
+package wrightway.gdx.graphics;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.*;

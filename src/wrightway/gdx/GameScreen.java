@@ -1,5 +1,7 @@
 package wrightway.gdx;
 
+import wrightway.gdx.actor.ScreenActor;
+import wrightway.gdx.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.*;

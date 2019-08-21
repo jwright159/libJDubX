@@ -1,6 +1,6 @@
-package wrightway.gdx;
+package wrightway.gdx.jvs;
 
-import wrightway.gdx.JVSValue.*;
+import wrightway.gdx.jvs.JVSValue.*;
 import com.badlogic.gdx.math.*;
 
 public class JVSLibs extends WObject{

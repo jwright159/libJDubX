@@ -1,5 +1,6 @@
-package wrightway.gdx;
+package wrightway.gdx.jvs;
 
+import wrightway.gdx.Log;
 import com.badlogic.gdx.utils.*;
 import java.util.*;
 

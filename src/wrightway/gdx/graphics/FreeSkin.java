@@ -1,5 +1,6 @@
-package wrightway.gdx;
+package wrightway.gdx.graphics;
 
+import wrightway.gdx.Log;
 import com.badlogic.gdx.files.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
