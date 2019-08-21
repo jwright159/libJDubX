@@ -3,7 +3,7 @@ package wrightway.gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
-public class TextureActor extends WActor{
+public class TextureActor extends ScreenActor{
 	private LayeredTextureRegion region;
 	public TextureActor(){
 		region = new LayeredTextureRegion();

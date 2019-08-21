@@ -10,11 +10,11 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.*;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
-public class WSkin extends Skin{
-	public WSkin(){
+public class FreeSkin extends Skin{
+	public FreeSkin(){
 		super();
 	}
-	public WSkin(FileHandle json, TextureAtlas atlas){
+	public FreeSkin(FileHandle json, TextureAtlas atlas){
 		super(json, atlas);
 	}
 	/** Overridden to do NineRegions */

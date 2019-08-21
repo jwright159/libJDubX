@@ -13,11 +13,11 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
 
-public abstract class WActor extends Actor implements Disposable{
-	public WActor(){
-		addListener(new WActorGestureListener());
+public abstract class ScreenActor extends Actor implements Disposable{
+	public ScreenActor(){
+		addListener(new ScreenActorGestureListener());
 	}
-	public WActor(Actor actor){
+	public ScreenActor(Actor actor){
 		this();
 		setBounds(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
 		setScale(actor.getScaleX(), actor.getScaleY());
@@ -94,7 +94,7 @@ public abstract class WActor extends Actor implements Disposable{
 	
 	@Override
 	public void dispose(){
-		//Tenebrae.debug("Disposing of WActor! "+this);
+		//Log.debug("Disposing of WActor! "+this);
 		remove();
 	}
 
@@ -104,22 +104,22 @@ public abstract class WActor extends Actor implements Disposable{
 	public void pan(float x, float y, float deltaX, float deltaY){}
 	public void tap(float x, float y, int count, int button){}
 
-	public class WActorGestureListener extends ActorGestureListener{
+	public class ScreenActorGestureListener extends ActorGestureListener{
 		@Override
 		public void touchDown(InputEvent event, float x, float y, int pointer, int button){
-			WActor.this.touchDown(x, y, pointer, button);
+			ScreenActor.this.touchDown(x, y, pointer, button);
 		}
 		@Override
 		public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-			WActor.this.touchUp(x, y, pointer, button);
+			ScreenActor.this.touchUp(x, y, pointer, button);
 		}
 		@Override
 		public void pan(InputEvent event, float x, float y, float deltaX, float deltaY){
-			WActor.this.pan(x, y, deltaX, deltaY);
+			ScreenActor.this.pan(x, y, deltaX, deltaY);
 		}
 		@Override
 		public void tap(InputEvent event, float x, float y, int count, int button){
-			WActor.this.tap(x, y, count, button);
+			ScreenActor.this.tap(x, y, count, button);
 		}
 	}
 }

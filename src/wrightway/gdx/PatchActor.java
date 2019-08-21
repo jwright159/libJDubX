@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.*;
 
-public class PatchActor extends WActor{
+public class PatchActor extends ScreenActor{
 	private int borderAlign = Align.right;
 	private NinePatch patch;
 
