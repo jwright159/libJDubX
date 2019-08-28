@@ -1,5 +1,6 @@
-package wrightway.gdx;
+package wrightway.gdx.screen;
 
+import wrightway.gdx.Log;
 import wrightway.gdx.actor.ScreenActor;
 import wrightway.gdx.graphics.*;
 import com.badlogic.gdx.*;
