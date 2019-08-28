@@ -1,10 +1,10 @@
-package wrightway.gdx.jvs;
+package com.github.jwright159.gdx.jvs;
 
-import wrightway.gdx.Log;
+import com.github.jwright159.gdx.Log;
 import com.badlogic.gdx.utils.*;
 import java.util.*;
-import static wrightway.gdx.jvs.JVSParser.isTruthy;
-import wrightway.gdx.jvs.JVSValue.*;
+import static com.github.jwright159.gdx.jvs.JVSParser.isTruthy;
+import com.github.jwright159.gdx.jvs.JVSValue.*;
 
 public interface JVSValue{
 	public Object get(Scope scope)

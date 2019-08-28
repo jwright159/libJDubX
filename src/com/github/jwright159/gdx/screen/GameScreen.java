@@ -1,8 +1,8 @@
-package wrightway.gdx.screen;
+package com.github.jwright159.gdx.screen;
 
-import wrightway.gdx.Log;
-import wrightway.gdx.actor.ScreenActor;
-import wrightway.gdx.graphics.*;
+import com.github.jwright159.gdx.Log;
+import com.github.jwright159.gdx.actor.ScreenActor;
+import com.github.jwright159.gdx.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.*;

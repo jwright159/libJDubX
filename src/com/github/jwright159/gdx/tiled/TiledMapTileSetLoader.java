@@ -1,6 +1,6 @@
-package wrightway.gdx.tiled;
+package com.github.jwright159.gdx.tiled;
 
-import wrightway.gdx.Utils;
+import com.github.jwright159.gdx.Utils;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.files.*;
 import com.badlogic.gdx.utils.*;

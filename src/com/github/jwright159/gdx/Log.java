@@ -1,4 +1,4 @@
-package wrightway.gdx;
+package com.github.jwright159.gdx;
 
 import java.io.*;
 import com.badlogic.gdx.files.*;

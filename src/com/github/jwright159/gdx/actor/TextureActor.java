@@ -1,6 +1,6 @@
-package wrightway.gdx.actor;
+package com.github.jwright159.gdx.actor;
 
-import wrightway.gdx.graphics.LayeredTextureRegion;
+import com.github.jwright159.gdx.graphics.LayeredTextureRegion;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
