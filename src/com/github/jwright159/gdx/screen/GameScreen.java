@@ -56,7 +56,7 @@ public class GameScreen implements Screen{
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		}
 
-		if(isRunning){
+		if(isRunning && delta != 0){
 			act(delta);
 			worldStage.act();
 			uiStage.act();
@@ -89,6 +89,13 @@ public class GameScreen implements Screen{
 	}
 	public Table getTable(){
 		return table;
+	}
+	
+	public float getWidth(){
+		return getCamera().viewportWidth;
+	}
+	public float getHeight(){
+		return getCamera().viewportHeight;
 	}
 	
 	public void dispose(boolean disposeUi){
