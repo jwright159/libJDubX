@@ -13,6 +13,9 @@ public class TextureActor extends ScreenActor{
 		this();
 		setRegion(0, region);
 	}
+	public TextureActor(Texture region){
+		this(new TextureRegion(region));
+	}
 	public TextureActor(LayeredTextureRegion region){
 		setRegions(region);
 	}
