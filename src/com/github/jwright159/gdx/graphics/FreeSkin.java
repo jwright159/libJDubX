@@ -1,5 +1,6 @@
-package wrightway.gdx;
+package com.github.jwright159.gdx.graphics;
 
+import com.github.jwright159.gdx.Log;
 import com.badlogic.gdx.files.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -10,11 +11,11 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.*;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
-public class WSkin extends Skin{
-	public WSkin(){
+public class FreeSkin extends Skin{
+	public FreeSkin(){
 		super();
 	}
-	public WSkin(FileHandle json, TextureAtlas atlas){
+	public FreeSkin(FileHandle json, TextureAtlas atlas){
 		super(json, atlas);
 	}
 	/** Overridden to do NineRegions */

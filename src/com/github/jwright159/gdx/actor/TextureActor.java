@@ -1,9 +1,10 @@
-package wrightway.gdx;
+package com.github.jwright159.gdx.actor;
 
+import com.github.jwright159.gdx.graphics.LayeredTextureRegion;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
-public class TextureActor extends WActor{
+public class TextureActor extends ScreenActor{
 	private LayeredTextureRegion region;
 	public TextureActor(){
 		region = new LayeredTextureRegion();
@@ -11,6 +12,9 @@ public class TextureActor extends WActor{
 	public TextureActor(TextureRegion region){
 		this();
 		setRegion(0, region);
+	}
+	public TextureActor(Texture region){
+		this(new TextureRegion(region));
 	}
 	public TextureActor(LayeredTextureRegion region){
 		setRegions(region);

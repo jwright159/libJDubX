@@ -1,4 +1,4 @@
-package wrightway.gdx;
+package com.github.jwright159.gdx.tiled;
 
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
