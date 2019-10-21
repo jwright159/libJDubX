@@ -84,6 +84,9 @@ public class GameScreen implements Screen{
 	public InputMultiplexer getMultiplexer(){
 		return multiplexer;
 	}
+	public void setSkin(Skin skin){
+		this.skin = skin;
+	}
 	public Skin getSkin(){
 		return skin;
 	}
