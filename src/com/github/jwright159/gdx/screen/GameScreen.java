@@ -1,6 +1,6 @@
 package com.github.jwright159.gdx.screen;
 
-import com.github.jwright159.gdx.Log;
+import com.github.jwright159.gdx.*;
 import com.github.jwright159.gdx.actor.ScreenActor;
 import com.github.jwright159.gdx.graphics.*;
 import com.badlogic.gdx.*;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import java.util.*;
 
 public class GameScreen implements Screen{
 	private Stage worldStage, uiStage;
@@ -17,13 +18,36 @@ public class GameScreen implements Screen{
 	private Skin skin;
 	private TextureAtlas skinta;
 	private Table table;
+	
+	private FocusTable focusedTable;
 
 	public GameScreen(Stage otherWorldStage, Stage otherUiStage){
 		worldStage = otherWorldStage == null ? new Stage(new ScreenViewport()) : otherWorldStage;
 		uiStage = otherUiStage == null ? new Stage(new ScreenViewport()) : otherUiStage;
+		
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
 		multiplexer.addProcessor(worldStage);
+		multiplexer.addProcessor(new InputAdapter(){
+				public boolean keyDown(int keycode){
+					switch(keycode){
+						case Input.Keys.UP:
+						case Input.Keys.DOWN:
+						case Input.Keys.LEFT:
+						case Input.Keys.RIGHT:
+						case Input.Keys.ENTER:
+							if(focusedTable != null){
+								focusedTable.handleFocus(keycode);
+								return true;
+							}else
+								return false;
+						
+						default:
+							return false;
+					}
+				}
+			});
+		
 		skin = new FreeSkin(Gdx.files.internal("uiskin.json"), skinta = new NineRegionTextureAtlas(Gdx.files.internal("uiskin.atlas")));
 		uiStage.addActor(table = new Table(skin));
 		table.setFillParent(true);
@@ -99,6 +123,18 @@ public class GameScreen implements Screen{
 	}
 	public float getHeight(){
 		return getCamera().viewportHeight;
+	}
+	
+	public void setFocusTable(FocusTable table){
+		boolean wasFocused = focusedTable != null && focusedTable.isFocussed();
+		if(wasFocused)
+			focusedTable.unfocus();
+		focusedTable = table;
+		if(wasFocused)
+			focusedTable.focus();
+	}
+	public FocusTable getFocusTable(){
+		return focusedTable;
 	}
 	
 	public void dispose(boolean disposeUi){
