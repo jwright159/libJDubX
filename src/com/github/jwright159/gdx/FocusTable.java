@@ -122,14 +122,17 @@ public class FocusTable extends Table{
 		
 		int newCellIndex = cellIndex;
 		Cell<Button> newCell;
+		boolean useLast;
 		do{
 			newCell = registeredCells.get(++newCellIndex);
 			Log.debug("Checking", cellIndex, cell.getActorX(), cell.getRow(), "against", newCellIndex, newCell.getActorX(), newCell.getRow());
-		}while(newCell.getRow() < cell.getRow()+2 && newCell.getActorX() <= cell.getActorX());
+			useLast = newCellIndex == registeredCells.size - 1 && (newCell.getRow() == cell.getRow() || newCell.getActorX() <= cell.getActorX());
+		}while(newCell.getRow() < cell.getRow()+2 && newCell.getActorX() <= cell.getActorX() && newCellIndex < registeredCells.size - 1);
 		Log.debug("Done checking");
 		
-		// Use cell to left
-		newCellIndex--;
+		// Use cell to left, except when cell is final cell
+		if(!useLast || newCell.getRow() > cell.getRow() + 1)
+			newCellIndex--;
 		
 		refocus(newCellIndex);
 	}
