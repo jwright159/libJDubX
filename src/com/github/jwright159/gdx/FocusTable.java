@@ -38,6 +38,8 @@ public class FocusTable extends Table{
 		Log.debug("Unfocused", cell.getActor(), cell.getColumn(), cell.getRow());
 		isFocussed = false;
 		cell.getActor().getClickListener().exit(null, 0, 0, -1, null);
+		cell = null;
+		cellIndex = -1;
 	}
 	public void refocus(int index){
 		unfocus();

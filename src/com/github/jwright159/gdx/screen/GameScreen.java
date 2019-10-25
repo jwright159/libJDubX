@@ -130,7 +130,7 @@ public class GameScreen implements Screen{
 		if(wasFocused)
 			focusedTable.unfocus();
 		focusedTable = table;
-		if(wasFocused)
+		if(wasFocused && focusedTable != null)
 			focusedTable.focus();
 	}
 	public FocusTable getFocusTable(){
