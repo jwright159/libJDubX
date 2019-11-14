@@ -52,22 +52,19 @@ public class GameScreen implements Screen{
 		uiStage.addActor(table = new Table(skin));
 		table.setFillParent(true);
 	}
-	public GameScreen(ScalingViewport worldView, ScalingViewport uiView){
+	public GameScreen(Viewport worldView, Viewport uiView){
 		this(new Stage(worldView == null ? new ScreenViewport() : worldView), new Stage(uiView == null ? new ScreenViewport() : uiView));
 	}
 	
-	public GameScreen(Stage otherWorldStage, ScalingViewport uiView){
+	public GameScreen(Stage otherWorldStage, Viewport uiView){
 		this(otherWorldStage, new Stage(uiView == null ? new ScreenViewport() : uiView));
 	}
-	public GameScreen(ScalingViewport worldView, Stage otherUiStage){
+	public GameScreen(Viewport worldView, Stage otherUiStage){
 		this(new Stage(worldView == null ? new ScreenViewport() : worldView), otherUiStage);
 	}
 	
 	public GameScreen(Stage otherUiStage){
 		this((Stage)null, otherUiStage);
-	}
-	public GameScreen(ScalingViewport view){
-		this(view, view == null ? null : new ScalingViewport(view.getScaling(), view.getWorldWidth(), view.getWorldHeight()));
 	}
 	public GameScreen(){
 		this((Stage)null, (Stage)null);
@@ -87,8 +84,10 @@ public class GameScreen implements Screen{
 		}
 		if(isShowing){
 			com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile.updateAnimationBaseTime();
+			worldStage.getViewport().apply();
 			draw();
 			worldStage.draw();
+			uiStage.getViewport().apply();
 			uiStage.draw();
 		}
 	}
@@ -102,12 +101,29 @@ public class GameScreen implements Screen{
 	public Stage getUiStage(){
 		return uiStage;
 	}
+	
 	public OrthographicCamera getCamera(){
 		return (OrthographicCamera)worldStage.getCamera();
 	}
+	public void setViewport(Viewport viewport){
+		worldStage.setViewport(viewport);
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	}
+	public Viewport getViewport(){
+		return worldStage.getViewport();
+	}
+	public void setUiViewport(Viewport viewport){
+		uiStage.setViewport(viewport);
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	}
+	public Viewport getUiViewport(){
+		return uiStage.getViewport();
+	}
+	
 	public InputMultiplexer getMultiplexer(){
 		return multiplexer;
 	}
+	
 	public void setSkin(Skin skin){
 		this.skin = skin;
 	}

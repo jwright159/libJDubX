@@ -49,7 +49,7 @@ public class GuiScreen implements Screen{
 		stage.addActor(table = new Table(skin));
 		table.setFillParent(true);
 	}
-	public GuiScreen(ScalingViewport view){
+	public GuiScreen(Viewport view){
 		this(new Stage(view == null ? new ScreenViewport() : view));
 	}
 	public GuiScreen(){
@@ -83,6 +83,14 @@ public class GuiScreen implements Screen{
 	public OrthographicCamera getCamera(){
 		return (OrthographicCamera)stage.getCamera();
 	}
+	public void setViewport(Viewport viewport){
+		stage.setViewport(viewport);
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	}
+	public Viewport getViewport(){
+		return stage.getViewport();
+	}
+	
 	public InputMultiplexer getMultiplexer(){
 		return multiplexer;
 	}
