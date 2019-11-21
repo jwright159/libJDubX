@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
+import com.github.jwright159.gdx.*;
 
 public abstract class ScreenActor extends Actor implements Disposable{
 	public ScreenActor(){
@@ -19,16 +20,7 @@ public abstract class ScreenActor extends Actor implements Disposable{
 	}
 	public ScreenActor(Actor actor){
 		this();
-		setBounds(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
-		setScale(actor.getScaleX(), actor.getScaleY());
-		setName(actor.getName());
-		setTouchable(actor.getTouchable());
-		setOrigin(actor.getOriginX(), actor.getOriginY());
-		setDebug(actor.getDebug());
-		setVisible(actor.isVisible());
-		setColor(actor.getColor());
-		setUserObject(actor.getUserObject());
-		setRotation(actor.getRotation());
+		Utils.setActorFromActor(this, actor);
 	}
 
 	public void setRect(Rectangle rect){

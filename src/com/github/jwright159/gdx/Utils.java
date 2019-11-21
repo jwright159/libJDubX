@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.*;
 import java.util.*;
 import com.badlogic.gdx.maps.objects.*;
+import com.badlogic.gdx.scenes.scene2d.*;
 
 public abstract class Utils{
 	public static String[] trimArray(String[] array){
@@ -44,6 +45,19 @@ public abstract class Utils{
 		r.getRectangle().set(o.getRectangle());
 		r.getProperties().putAll(o.getProperties());
 		return r;
+	}
+	
+	public static void setActorFromActor(Actor to, Actor from){
+		to.setBounds(from.getX(), from.getY(), from.getWidth(), from.getHeight());
+		to.setScale(from.getScaleX(), from.getScaleY());
+		to.setName(from.getName());
+		to.setTouchable(from.getTouchable());
+		to.setOrigin(from.getOriginX(), from.getOriginY());
+		to.setDebug(from.getDebug());
+		to.setVisible(from.isVisible());
+		to.setColor(from.getColor());
+		to.setUserObject(from.getUserObject());
+		to.setRotation(from.getRotation());
 	}
 	
 	public static <T> void insertAllFirst(Array<T> a, Array<T> b){

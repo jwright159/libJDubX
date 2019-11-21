@@ -48,12 +48,14 @@ public class PatchActor extends ScreenActor{
 
 	@Override
 	public void draw(Batch batch, float parentAlpha){
+		moveBy(-getOriginX(), -getOriginY());
 		if(Align.isLeft(borderAlign))
 			patch.draw(batch, getX()-patch.getLeftWidth(), getY()-patch.getBottomHeight(), patch.getLeftWidth()+getWidth()*getScaleX()+patch.getRightWidth(), patch.getBottomHeight()+getHeight()*getScaleY()+patch.getTopHeight());
 		else if(Align.isRight(borderAlign))
 			patch.draw(batch, getX(), getY(), getWidth()*getScaleX(), getHeight()*getScaleY());
 		else
 			patch.draw(batch, getX()-patch.getLeftWidth()/2, getY()-patch.getBottomHeight()/2, patch.getLeftWidth()/2+getWidth()*getScaleX()+patch.getRightWidth()/2, patch.getBottomHeight()/2+getHeight()*getScaleY()+patch.getTopHeight()/2);
+		moveBy(getOriginX(), getOriginY());
 	}
 
 	@Override
