@@ -85,6 +85,11 @@ public abstract class ScreenActor extends Actor implements Disposable{
 	public abstract void draw(Batch batch, float parentAlpha)
 	
 	@Override
+	public String toString(){
+		return super.toString()+"@"+Integer.toHexString(System.identityHashCode(this));
+	}
+	
+	@Override
 	public void dispose(){
 		//Log.debug("Disposing of WActor! "+this);
 		remove();
