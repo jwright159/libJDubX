@@ -58,15 +58,9 @@ public class TextureActor extends ScreenActor{
 		return region;
 	}
 
-	private static Color tmp = new Color();
 	@Override
-	public void draw(Batch batch, float parentAlpha){
-		tmp.set(batch.getColor());
-		batch.setColor(batch.getColor().mul(getColor()));
-		moveBy(-getOriginX(), -getOriginY());
+	public void draw(Batch batch){
 		region.draw(batch, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-		moveBy(getOriginX(), getOriginY());
-		batch.getColor().set(tmp);
 	}
 
 	@Override

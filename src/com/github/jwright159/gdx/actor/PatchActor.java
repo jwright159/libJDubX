@@ -36,26 +36,13 @@ public class PatchActor extends ScreenActor{
 	}
 
 	@Override
-	public void setColor(Color color){
-		super.setColor(color);
-		patch.setColor(color);
-	}
-	@Override
-	public void setColor(float r, float g, float b, float a){
-		super.setColor(r, g, b, a);
-		patch.setColor(new Color(r, g, b, a));
-	}
-
-	@Override
-	public void draw(Batch batch, float parentAlpha){
-		moveBy(-getOriginX(), -getOriginY());
+	public void draw(Batch batch){
 		if(Align.isLeft(borderAlign))
-			patch.draw(batch, getX()-patch.getLeftWidth(), getY()-patch.getBottomHeight(), patch.getLeftWidth()+getWidth()*getScaleX()+patch.getRightWidth(), patch.getBottomHeight()+getHeight()*getScaleY()+patch.getTopHeight());
+			patch.draw(batch, -patch.getLeftWidth(), -patch.getBottomHeight(), patch.getLeftWidth()+getWidth()+patch.getRightWidth(), patch.getBottomHeight()+getHeight()+patch.getTopHeight());
 		else if(Align.isRight(borderAlign))
-			patch.draw(batch, getX(), getY(), getWidth()*getScaleX(), getHeight()*getScaleY());
+			patch.draw(batch, 0, 0, getWidth(), getHeight());
 		else
-			patch.draw(batch, getX()-patch.getLeftWidth()/2, getY()-patch.getBottomHeight()/2, patch.getLeftWidth()/2+getWidth()*getScaleX()+patch.getRightWidth()/2, patch.getBottomHeight()/2+getHeight()*getScaleY()+patch.getTopHeight()/2);
-		moveBy(getOriginX(), getOriginY());
+			patch.draw(batch, -patch.getLeftWidth()/2, -patch.getBottomHeight()/2, patch.getLeftWidth()/2+getWidth()+patch.getRightWidth()/2, patch.getBottomHeight()/2+getHeight()+patch.getTopHeight()/2);
 	}
 
 	@Override
