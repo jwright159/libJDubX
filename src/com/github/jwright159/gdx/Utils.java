@@ -79,4 +79,41 @@ public abstract class Utils{
 	public static String filename(String fullfile){
 		return fullfile.contains(".") ? fullfile.substring(0, fullfile.lastIndexOf('.')) : fullfile;
 	}
+	
+	public static final double VERTICALMIN = 0.02;
+	public static Vector3 rotateVertically(Vector3 vector, double rotation){
+		rotation *= Math.PI / 180.0;
+		double r = vector.len();
+		double phi = getPhi(vector);
+		double theta = getTheta(vector);
+		theta -= rotation;
+		theta = MathUtils.clamp(theta, VERTICALMIN, Math.PI - VERTICALMIN);
+		return vector.set(getXComponent(r, theta, phi), getYComponent(r, theta, phi), getZComponent(r, theta, phi));
+	}
+	public static Vector3 rotateHorizontally(Vector3 vector, double rotation){
+		rotation *= Math.PI / 180.0;
+		double r = vector.len();
+		double phi = getPhi(vector);
+		phi += rotation;
+		double theta = getTheta(vector);
+		return vector.set(getXComponent(r, theta, phi), getYComponent(r, theta, phi), getZComponent(r, theta, phi));
+	}
+
+	// <r, phi, theta> == <mag, x-z plane, y-xz plane>
+	public static double getPhi(Vector3 vector){
+		return (vector.x == 0 ? (vector.z > 0 ? Math.PI / 2.0 : -Math.PI / 2.0) :
+			Math.atan(vector.z / vector.x)) + (vector.x < 0 ? Math.PI : 0);
+	}
+	public static double getTheta(Vector3 vector){
+		return Math.acos(vector.y / vector.len());
+	}
+	public static float getXComponent(double r, double theta, double phi){
+		return (float)(r * Math.sin(theta) * Math.cos(phi));
+	}
+	public static float getYComponent(double r, double theta, double phi){
+		return (float)(r * Math.cos(theta));
+	}
+	public static float getZComponent(double r, double theta, double phi){
+		return (float)(r * Math.sin(theta) * Math.sin(phi));
+	}
 }
