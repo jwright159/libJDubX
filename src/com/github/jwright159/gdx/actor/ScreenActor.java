@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
+import com.github.jwright159.gdx.*;
 
 public abstract class ScreenActor extends Actor implements Disposable{
 	public ScreenActor(){
@@ -19,16 +20,7 @@ public abstract class ScreenActor extends Actor implements Disposable{
 	}
 	public ScreenActor(Actor actor){
 		this();
-		setBounds(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
-		setScale(actor.getScaleX(), actor.getScaleY());
-		setName(actor.getName());
-		setTouchable(actor.getTouchable());
-		setOrigin(actor.getOriginX(), actor.getOriginY());
-		setDebug(actor.getDebug());
-		setVisible(actor.isVisible());
-		setColor(actor.getColor());
-		setUserObject(actor.getUserObject());
-		setRotation(actor.getRotation());
+		Utils.setActorFromActor(this, actor);
 	}
 
 	public void setRect(Rectangle rect){
@@ -88,9 +80,41 @@ public abstract class ScreenActor extends Actor implements Disposable{
 		}
 		return did;
 	}
+	
+	private Affine2 worldTransform = new Affine2();
+	private Matrix4 computedTransform = new Matrix4();
+	protected Matrix4 computeTransform(){
+		worldTransform.setToTrnRotScl(getX(), getY(), getRotation(), getScaleX(), getScaleY());
+		worldTransform.translate(-getOriginX(), -getOriginY());
+		computedTransform.set(worldTransform);
+		return computedTransform;
+	}
 
+	private Color oldColor = new Color();
+	private Matrix4 oldTransform = new Matrix4();
 	@Override
-	public abstract void draw(Batch batch, float parentAlpha)
+	public void draw(Batch batch, float parentAlpha){
+		oldColor.set(batch.getColor());
+		oldTransform.set(batch.getTransformMatrix());
+		
+		batch.setColor(batch.getColor().mul(getColor()));
+		/*Log.debug(this, oldTransform, computeTransform());
+		Log.debug(computedTransform.mulLeft(oldTransform), getWidth(), getHeight());
+		Log.debug(getX(), getY(), getOriginX(), getOriginY(), getRotation(), getScaleX(), getScaleY());*/
+		batch.setTransformMatrix(computeTransform().mulLeft(oldTransform));
+		
+		draw(batch);
+		
+		batch.setTransformMatrix(oldTransform);
+		batch.setColor(oldColor);
+	}
+	
+	public abstract void draw(Batch batch)
+	
+	@Override
+	public String toString(){
+		return super.toString()+"@"+Integer.toHexString(System.identityHashCode(this));
+	}
 	
 	@Override
 	public void dispose(){
