@@ -6,7 +6,7 @@ import com.badlogic.gdx.*;
 
 public abstract class Log{
 	private static Writer logFile;
-	//static final byte verbosity = 0b010_1111;//error=000_0001, user=000_0010, debug=000_0100, verbose=000_1000, verbose2=001_0000, parse=010_0000, parseverbose=100_0000 (only 7 bits bc signed)
+	//static final byte verbosity = 0b010_1111;//error=000_0001, user=000_0010, debug=000_0100, ui=000_1000, graphics=001_0000, audio=010_0000, gameplay=100_0000 (only 7 bits bc signed)
 	private static byte verbosity;
 	
 	public static void setVerbosity(String v){
@@ -47,16 +47,16 @@ public abstract class Log{
 	public static void debug(Object... msg){
 		log((byte)0b000_0100, msg);
 	}
-	public static void verbose(Object... msg){
+	public static void ui(Object... msg){
 		log((byte)0b000_1000, msg);
 	}
-	public static void verbose2(Object... msg){
+	public static void graphics(Object... msg){
 		log((byte)0b001_0000, msg);
 	}
-	public static void parseLog(Object... msg){
+	public static void audio(Object... msg){
 		log((byte)0b010_0000, msg);
 	}
-	public static void parseVerbose(Object... msg){
+	public static void gameplay(Object... msg){
 		log((byte)0b100_0000, msg);
 	}
 	public static void log(byte type, Object... msg){
@@ -80,13 +80,13 @@ public abstract class Log{
 		if((t & 0b000_0100) != 0)
 			tag += "DEBUG,";
 		if((t & 0b000_1000) != 0)
-			tag += "VERBO,";
+			tag += "USINT,";
 		if((t & 0b001_0000) != 0)
-			tag += "VERB2,";
+			tag += "GRAPH,";
 		if((t & 0b010_0000) != 0)
-			tag += "PARSE,";
+			tag += "AUDIO,";
 		if((t & 0b100_0000) != 0)
-			tag += "PVERB,";
+			tag += "GMPLY,";
 		if(tag.isEmpty())
 			return;
 

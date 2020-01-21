@@ -28,14 +28,14 @@ public class FocusTable extends Table{
 	public void focus(){
 		if(nullCell())
 			return;
-		Log.debug("Focused", cell.getActor(), cell.getColumn(), cell.getRow());
+		Log.ui("Focused", cell.getActor(), cell.getColumn(), cell.getRow());
 		isFocussed = true;
 		cell.getActor().getClickListener().enter(null, 0, 0, -1, null);
 	}
 	public void unfocus(){
 		if(cell == null)
 			return;
-		Log.debug("Unfocused", cell.getActor(), cell.getColumn(), cell.getRow());
+		Log.ui("Unfocused", cell.getActor(), cell.getColumn(), cell.getRow());
 		isFocussed = false;
 		if(cell.getActor() != null)
 			cell.getActor().getClickListener().exit(null, 0, 0, -1, null);
@@ -50,7 +50,7 @@ public class FocusTable extends Table{
 	}
 	
 	private boolean nullCell(){
-		Log.debug("Is null?", cell == null);
+		Log.ui("Is null?", cell == null);
 		if(cell != null)
 			return false;
 		refocus(0);
@@ -97,7 +97,7 @@ public class FocusTable extends Table{
 	}
 	
 	public void focusUp(){
-		Log.debug("Going up");
+		Log.ui("Going up");
 		if(nullCell())
 			return;
 		if(cellIndex == 0)
@@ -107,9 +107,9 @@ public class FocusTable extends Table{
 		Cell<Button> newCell;
 		do{
 			newCell = registeredCells.get(--newCellIndex);
-			Log.debug("Checking", cellIndex, cell.getActorX(), cell.getRow(), "against", newCellIndex, newCell.getActorX(), newCell.getRow());
+			Log.ui("Checking", cellIndex, cell.getActorX(), cell.getRow(), "against", newCellIndex, newCell.getActorX(), newCell.getRow());
 		}while(newCell.getRow() > cell.getRow()-2 && newCell.getActorX() > cell.getActorX());
-		Log.debug("Done checking");
+		Log.ui("Done checking");
 		
 		if(newCell.getRow() == cell.getRow()-2)
 			newCellIndex++;
@@ -117,7 +117,7 @@ public class FocusTable extends Table{
 		refocus(newCellIndex);
 	}
 	public void focusDown(){
-		Log.debug("Going down");
+		Log.ui("Going down");
 		if(nullCell())
 			return;
 		if(cellIndex+1 == registeredCells.size)
@@ -128,10 +128,10 @@ public class FocusTable extends Table{
 		boolean useLast;
 		do{
 			newCell = registeredCells.get(++newCellIndex);
-			Log.debug("Checking", cellIndex, cell.getActorX(), cell.getRow(), "against", newCellIndex, newCell.getActorX(), newCell.getRow());
+			Log.ui("Checking", cellIndex, cell.getActorX(), cell.getRow(), "against", newCellIndex, newCell.getActorX(), newCell.getRow());
 			useLast = newCellIndex == registeredCells.size - 1 && (newCell.getRow() == cell.getRow() || newCell.getActorX() <= cell.getActorX());
 		}while(newCell.getRow() < cell.getRow()+2 && newCell.getActorX() <= cell.getActorX() && newCellIndex < registeredCells.size - 1);
-		Log.debug("Done checking");
+		Log.ui("Done checking");
 		
 		// Use cell to left, except when cell is final cell
 		if(!useLast || newCell.getRow() > cell.getRow() + 1)
@@ -140,7 +140,7 @@ public class FocusTable extends Table{
 		refocus(newCellIndex);
 	}
 	public void focusLeft(){
-		Log.debug("Going left");
+		Log.ui("Going left");
 		if(nullCell())
 			return;
 		if(cellIndex == 0)
@@ -148,8 +148,8 @@ public class FocusTable extends Table{
 
 		int newCellIndex = cellIndex;
 		Cell<Button> newCell = registeredCells.get(--newCellIndex);
-		Log.debug("Checking", cellIndex, cell.getColumn(), cell.getRow(), "against", newCellIndex, newCell.getColumn(), newCell.getRow());
-		Log.debug("Done checking");
+		Log.ui("Checking", cellIndex, cell.getColumn(), cell.getRow(), "against", newCellIndex, newCell.getColumn(), newCell.getRow());
+		Log.ui("Done checking");
 
 		if(newCell.getRow() != cell.getRow())
 			return;
@@ -157,7 +157,7 @@ public class FocusTable extends Table{
 		refocus(newCellIndex);
 	}
 	public void focusRight(){
-		Log.debug("Going left");
+		Log.ui("Going left");
 		if(nullCell())
 			return;
 		if(cellIndex+1 == registeredCells.size)
@@ -165,8 +165,8 @@ public class FocusTable extends Table{
 
 		int newCellIndex = cellIndex;
 		Cell<Button> newCell = registeredCells.get(++newCellIndex);
-		Log.debug("Checking", cellIndex, cell.getColumn(), cell.getRow(), "against", newCellIndex, newCell.getColumn(), newCell.getRow());
-		Log.debug("Done checking");
+		Log.ui("Checking", cellIndex, cell.getColumn(), cell.getRow(), "against", newCellIndex, newCell.getColumn(), newCell.getRow());
+		Log.ui("Done checking");
 
 		if(newCell.getRow() != cell.getRow())
 			return;

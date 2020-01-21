@@ -132,7 +132,7 @@ public class GuiScreen implements Screen{
 
 	@Override
 	public void resize(int x, int y){
-		Log.verbose("Resizing! "+x+"x"+y);
+		Log.ui("Resizing! "+x+"x"+y);
 		stage.getViewport().update(x,y);
 	}
 

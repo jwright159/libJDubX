@@ -174,7 +174,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void resize(int x, int y){
-		Log.verbose("Resizing! "+x+"x"+y);
+		Log.ui("Resizing! "+x+"x"+y);
 		worldStage.getViewport().update(x,y);
 		uiStage.getViewport().update(x,y);
 	}
