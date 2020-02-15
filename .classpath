@@ -5,8 +5,4 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" exported="true" path="libs/gdx.jar"/>
 	<classpathentry kind="lib" exported="true" path="libs/gdx-freetype.jar"/>
-	
-	<!-- optional dependancies -->
-	<classpathentry kind="src" exported="true" path="/android-midi-lib" combineaccessrules="false"/>
-	<classpathentry kind="lib" exported="true" path="libs/luaj-jse-3.0.1.jar"/>
 </classpath>
