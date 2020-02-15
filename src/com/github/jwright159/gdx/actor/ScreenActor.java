@@ -28,10 +28,16 @@ public abstract class ScreenActor extends Actor implements Disposable{
 	}
 	private Rectangle rectBuffer = new Rectangle();
 	public Rectangle toRect(){
-		rectBuffer.set(getX(), getY(), getTrueWidth(), getTrueHeight());
+		rectBuffer.set(getTrueX(), getTrueY(), getTrueWidth(), getTrueHeight());
 		return rectBuffer;
 	}
 	
+	public float getTrueX(){
+		return getX()-getOriginX()*getScaleX();
+	}
+	public float getTrueY(){
+		return getY()-getOriginY()*getScaleY();
+	}
 	public float getTrueWidth(){
 		return getWidth() * getScaleX();
 	}
